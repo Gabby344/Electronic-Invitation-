@@ -2,110 +2,38 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin | The Gift of Word</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <title>Admin | Concilia & Rosin</title>
     <style>
-        :root {
-            --gold: #C5A059;
-            --anthracite: #2C2C2C;
-            --bg: #f8f9fa;
-        }
-
-        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg); color: var(--anthracite); margin: 0; }
-        
-        /* --- Login Overlay --- */
-        #login-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--anthracite); display: flex; justify-content: center;
-            align-items: center; z-index: 1000; transition: 0.5s;
-        }
-        .login-box { background: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-
-        /* --- Layout --- */
-        header { background: white; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .container { padding: 40px 5%; }
-
-        /* --- Stats Cards --- */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); text-align: center; border-bottom: 4px solid var(--gold); }
-        .card h3 { font-size: 0.9rem; text-transform: uppercase; color: #888; margin-bottom: 10px; }
-        .card p { font-size: 2.5rem; font-weight: 600; color: var(--anthracite); }
-
-        /* --- Table --- */
-        .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { background: var(--gold); color: white; padding: 15px; font-weight: 600; }
-        td { padding: 15px; border-bottom: 1px solid #eee; }
-        tr:hover { background-color: #fff9f0; }
-
-        .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
-        .badge-solo { background: #e3f2fd; color: #1976d2; }
-        .badge-couple { background: #f3e5f5; color: #7b1fa2; }
-
-        .btn-refresh { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
-
-        input { padding: 12px; width: 250px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 15px; display: block; }
+        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
+        .stats { display: flex; gap: 20px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 20px; border-radius: 10px; flex: 1; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; background: white; border-collapse: collapse; border-radius: 10px; overflow: hidden; }
+        th, td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background: #BF953F; color: white; }
     </style>
 </head>
 <body>
-
-    <!-- Ecran de connexion -->
-    <div id="login-overlay">
-        <div class="login-box">
-            <h2 style="font-family:'Playfair Display'; margin-bottom: 20px;">Accès Concilia & Rosin</h2>
-            <input type="password" id="admin-pass" placeholder="Mot de passe">
-            <button class="btn-refresh" onclick="checkAuth()" style="width: 100%;">Se connecter</button>
-        </div>
+    <h1>Gestion des Invités</h1>
+    <div class="stats">
+        <div class="stat-card"><h3>Inscriptions</h3><p id="count">0</p></div>
+        <div class="stat-card"><h3>Total Convives</h3><p id="total">0</p></div>
     </div>
-
-    <header>
-        <h1 style="font-family:'Playfair Display'; font-size: 1.5rem;">The Gift of Word <span style="font-weight: 300; font-size: 0.9rem;">| Admin</span></h1>
-        <button class="btn-refresh" onclick="location.reload()">Actualiser</button>
-    </header>
-
-    <main class="container">
-        <div class="stats-grid">
-            <div class="card">
-                <h3>Total Confirmations</h3>
-                <p id="stat-total">0</p>
-            </div>
-            <div class="card">
-                <h3>Total Personnes</h3>
-                <p id="stat-people">0</p>
-            </div>
-            <div class="card">
-                <h3>VIP</h3>
-                <p id="stat-vip">0</p>
-            </div>
-        </div>
-
-        <h2 style="margin-bottom: 20px;">Liste des Invités</h2>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Nom Complet</th>
-                        <th>Relation</th>
-                        <th>Type</th>
-                        <th>Régime / Allergie</th>
-                    </tr>
-                </thead>
-                <tbody id="guest-list">
-                    <!-- Les données s'afficheront ici -->
-                </tbody>
-            </table>
-        </div>
-    </main>
+    
+    <table id="admin-table">
+        <thead>
+            <tr>
+                <th>Nom Complet</th>
+                <th>Nombre</th>
+                <th>ID Unique (QR)</th>
+            </tr>
+        </thead>
+        <tbody id="list"></tbody>
+    </table>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Ta configuration Firebase (identique à index.html)
         const firebaseConfig = {
             apiKey: "AIzaSyASCqKVU-tchKTnjkwemo_8DORutXiGQCc",
             authDomain: "invitation-electronic.firebaseapp.com",
@@ -118,61 +46,21 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- AUTHENTIFICATION SIMPLE ---
-        window.checkAuth = function() {
-            const pass = document.getElementById('admin-pass').value;
-            if(pass === "TheGift2026") { // TON MOT DE PASSE
-                document.getElementById('login-overlay').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('login-overlay').style.display = 'none';
-                }, 500);
-                loadGuests();
-            } else {
-                alert("Mot de passe incorrect.");
-            }
-        };
+        onSnapshot(collection(db, "invites"), (snapshot) => {
+            const list = document.getElementById('list');
+            list.innerHTML = "";
+            let tCount = 0;
+            let tConvives = 0;
 
-        // --- CHARGEMENT DES DONNÉES ---
-        function loadGuests() {
-            const q = query(collection(db, "invites"), orderBy("timestamp", "desc"));
-            
-            onSnapshot(q, (snapshot) => {
-                const listBody = document.getElementById('guest-list');
-                listBody.innerHTML = "";
-                
-                let totalConfirmations = snapshot.size;
-                let totalPeople = 0;
-                let totalVip = 0;
-
-                snapshot.forEach((doc) => {
-                    const guest = doc.data();
-                    
-                    // Logique Stats
-                    totalPeople += (guest.attendance === "Couple" ? 2 : 1);
-                    if(guest.relation === "VIP") totalVip++;
-
-                    // Formatage Date
-                    const date = guest.timestamp ? new Date(guest.timestamp.seconds * 1000).toLocaleDateString('fr-FR') : "-";
-
-                    // Création de la ligne
-                    const row = `
-                        <tr>
-                            <td style="color: #888; font-size: 0.85rem;">${date}</td>
-                            <td style="font-weight: 600;">${guest.firstname} ${guest.lastname}</td>
-                            <td>${guest.relation}</td>
-                            <td><span class="badge ${guest.attendance === 'Solo' ? 'badge-solo' : 'badge-couple'}">${guest.attendance}</span></td>
-                            <td style="font-style: italic; color: #666;">${guest.diet || 'Aucun'}</td>
-                        </tr>
-                    `;
-                    listBody.innerHTML += row;
-                });
-
-                // Update Stats
-                document.getElementById('stat-total').innerText = totalConfirmations;
-                document.getElementById('stat-people').innerText = totalPeople;
-                document.getElementById('stat-vip').innerText = totalVip;
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                tCount++;
+                tConvives += parseInt(data.guests);
+                list.innerHTML += `<tr><td>${data.fullname}</td><td>${data.guests}</td><td>${doc.id}</td></tr>`;
             });
-        }
+            document.getElementById('count').innerText = tCount;
+            document.getElementById('total').innerText = tConvives;
+        });
     </script>
 </body>
 </html>
