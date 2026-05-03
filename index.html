@@ -3,130 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitation | Concilia & Rosin</title>
+    <title>Invitation de Mariage | Rosin & Concilia</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
         :root {
+            --gold: #C5A059;
             --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
             --dark: #1a1a1a;
-            --glass: rgba(255, 255, 255, 0.1);
+            --white: #ffffff;
         }
 
-        body { font-family: 'Montserrat', sans-serif; background: #0f0f0f; color: white; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background: #fafafa; color: var(--dark); overflow-x: hidden; }
 
-        /* --- Carrousel --- */
-        .carousel {
-            position: relative; height: 100vh; width: 100%; overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .carousel-slide {
-            position: absolute; width: 100%; height: 100%; opacity: 0;
-            transition: opacity 1.5s ease-in-out; background-size: cover; background-position: center;
-        }
-        .carousel-slide.active { opacity: 1; }
-        .hero-overlay {
-            position: absolute; z-index: 10; text-align: center;
-            background: rgba(0,0,0,0.5); padding: 40px; border-radius: 20px; backdrop-filter: blur(10px);
-            border: 1px solid var(--glass);
-        }
-
-        /* --- Textes Surbrillants --- */
-        .shimmer {
-            font-family: 'Playfair Display', serif;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% auto;
-            animation: shine 3s linear infinite;
-        }
+        /* --- Hero & Carrousel --- */
+        .hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; color: white; text-align: center; }
+        .carousel-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        .slide { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: 1.5s; }
+        .slide.active { opacity: 1; }
+        .hero-overlay { background: rgba(0,0,0,0.4); padding: 30px; border-radius: 15px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); }
+        
+        .shimmer { font-family: 'Playfair Display', serif; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s infinite; background-size: 200%; }
         @keyframes shine { to { background-position: 200% center; } }
 
-        /* --- Section RSVP Sécurisée --- */
-        .section-rsvp { padding: 80px 20px; display: flex; justify-content: center; }
-        .rsvp-card {
-            background: white; color: var(--dark); padding: 40px;
-            border-radius: 20px; max-width: 500px; width: 100%; text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
+        /* --- Sections --- */
+        section { padding: 80px 10%; text-align: center; }
+        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); margin-top: -50px; position: relative; z-index: 20; }
+        
+        h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 20px; color: var(--gold); }
+        .info-box { margin: 20px 0; line-height: 1.8; }
+
+        /* --- Formulaire --- */
         .form-group { margin-bottom: 15px; text-align: left; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-top: 5px; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+        .btn-gold { background: var(--gold-gradient); border: none; padding: 15px 30px; color: var(--dark); font-weight: 700; border-radius: 50px; cursor: pointer; width: 100%; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(191, 149, 63, 0.3); }
 
-        .btn-gold {
-            background: var(--gold-gradient); border: none; padding: 15px 30px;
-            color: var(--dark); font-weight: 700; border-radius: 50px;
-            cursor: pointer; width: 100%; transition: 0.3s;
-        }
-        .btn-gold:hover { transform: scale(1.02); filter: brightness(1.1); }
+        /* --- Ticket --- */
+        #ticket-display { display: none; margin-top: 30px; background: white; padding: 20px; border: 2px dashed var(--gold); border-radius: 10px; }
+        #qrcode { display: flex; justify-content: center; margin: 20px 0; }
 
-        /* --- Ticket Digital --- */
-        #ticket-result {
-            display: none; background: #fff; color: #000; padding: 20px;
-            border-radius: 10px; margin-top: 20px; position: relative;
-        }
-        #printable-invitation {
-            background: #fff; padding: 20px; border: 2px solid #BF953F;
-        }
-
-        .creator-tag { font-size: 0.7rem; opacity: 0.4; margin-top: 50px; text-align: center; }
+        .footer-dev { font-size: 0.6rem; opacity: 0.5; margin-top: 40px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="carousel">
-        <div class="carousel-slide active" style="background-image: url('conciliaetrosin1.jpg')"></div>
-        <div class="carousel-slide" style="background-image: url('conciliaetrosin2.jpg')"></div>
-        <div class="carousel-slide" style="background-image: url('conciliaetrosin3.jpg')"></div>
-        
+    <div class="hero">
+        <div class="carousel-bg">
+            <div class="slide active" style="background-image: url('conciliaetrosin1.jpg')"></div>
+            <div class="slide" style="background-image: url('conciliaetrosin2.jpg')"></div>
+            <div class="slide" style="background-image: url('conciliaetrosin3.jpg')"></div>
+        </div>
         <div class="hero-overlay">
-            <h1 class="shimmer" style="font-size: 3rem;">Invitation</h1>
-            <p style="font-size: 1.5rem; font-style: italic;">Concilia & Rosin</p>
-            <p style="margin-top: 20px;">Samedi 20 Juin 2026</p>
-            <a href="#rsvp-section" class="btn-gold" style="display:inline-block; margin-top: 30px; width: auto;">Confirmer ma présence</a>
+            <h1 class="shimmer" style="font-size: 3.5rem;">Invitation</h1>
+            <p style="font-size: 1.2rem; letter-spacing: 3px;">ROSIN & CONCILIA</p>
+            <p style="margin-top: 15px;">20 JUIN 2026 | LUBUMBASHI</p>
         </div>
     </div>
 
-    <section class="section-rsvp" id="rsvp-section">
-        <div class="rsvp-card">
-            <h2 class="shimmer" style="font-size: 2rem; margin-bottom: 20px;">RSVP</h2>
-            
-            <!-- Sécurité : Code d'accès -->
-            <div id="auth-zone">
-                <p>Veuillez entrer le code d'invitation reçu :</p>
-                <input type="text" id="access-code" placeholder="Code secret...">
-                <button class="btn-gold" onclick="unlockForm()" style="margin-top:10px;">Accéder au formulaire</button>
+    <section id="rsvp">
+        <div class="card">
+            <h2>RSVP</h2>
+            <div id="auth-check">
+                <p>Veuillez entrer le code d'accès personnel pour confirmer votre présence.</p>
+                <input type="text" id="access-code" placeholder="Code secret (ex: Rosin2026)" style="text-align: center; margin: 20px 0;">
+                <button class="btn-gold" onclick="unlockRSVP()">Accéder au formulaire</button>
             </div>
 
             <form id="rsvpForm" style="display: none;">
                 <div class="form-group">
-                    <label>Prénom & Nom</label>
-                    <input type="text" id="fullname" required>
+                    <label>Nom complet</label>
+                    <input type="text" id="guestName" required placeholder="Ex: Jean Mukendi">
                 </div>
                 <div class="form-group">
-                    <label>Nombre de personnes</label>
-                    <select id="guests">
-                        <option value="1">1 Personne (Solo)</option>
-                        <option value="2">2 Personnes (Couple)</option>
+                    <label>Vous venez en :</label>
+                    <select id="guestType">
+                        <option value="Solo">Solo</option>
+                        <option value="Couple">Couple</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-gold">Obtenir mon Pass QR</button>
+                <div class="form-group">
+                    <label>Relation</label>
+                    <select id="relation">
+                        <option value="Famille">Famille</option>
+                        <option value="Ami">Ami(e)</option>
+                        <option value="Collègue">Collègue</option>
+                        <option value="VIP">VIP</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-gold">Confirmer & Générer mon Pass</button>
             </form>
 
-            <div id="ticket-result">
-                <div id="printable-invitation">
-                    <h3 class="shimmer">Invitation Officielle</h3>
-                    <p><strong>Invité:</strong> <span id="display-name"></span></p>
-                    <div id="qrcode" style="display: flex; justify-content: center; margin: 15px 0;"></div>
-                    <p style="font-size: 0.8rem;">Présentez ce QR Code à l'entrée.</p>
+            <div id="ticket-display">
+                <div id="capture-area">
+                    <h3 class="shimmer">PASS ENTRÉE</h3>
+                    <p>Invité: <strong id="pass-name"></strong></p>
+                    <div id="qrcode"></div>
+                    <p style="font-size: 0.8rem;">Samedi 20 Juin 2026 - 19h00</p>
                 </div>
-                <button class="btn-gold" onclick="downloadInvitation()" style="margin-top: 15px; background: #000; color: #fff;">Télécharger l'image</button>
+                <button onclick="downloadPass()" style="margin-top: 15px; cursor: pointer; background: none; border: 1px solid #ccc; padding: 5px 10px; border-radius: 5px;">Télécharger mon Pass</button>
             </div>
         </div>
     </section>
 
-    <p class="creator-tag">Créé par Gabby U & Vainqueur</p>
+    <section style="background: white;">
+        <h2 class="shimmer">Programme</h2>
+        <div class="info-box">
+            <p><strong>14H00 :</strong> Bénédiction Nuptiale<br>Paroisse Saint Laurent, Route Kipopo, Lubumbashi</p>
+            <hr style="width: 50px; margin: 20px auto; border: 1px solid var(--gold);">
+            <p><strong>19H00 :</strong> Soirée Dansante<br>Salle Aurore, Avenue du 30 Juin, Lubumbashi</p>
+        </div>
+        <div style="margin-top: 30px;">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15636.56826645318!2d27.4794!3d-11.6667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTHCsDQwJzAwLjAiUyAyN8KwMjgnNDUuOCJF!5e0!3m2!1sfr!2scd!4v1700000000000" width="100%" height="300" style="border:0; border-radius: 15px;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <div class="footer-dev">DESIGNED BY GABBY U & VAINQUEUR</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -145,64 +141,56 @@
         const db = getFirestore(app);
 
         // --- CARROUSEL ---
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
         setInterval(() => {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
+            slides[slideIndex].classList.remove('active');
+            slideIndex = (slideIndex + 1) % slides.length;
+            slides[slideIndex].classList.add('active');
         }, 4000);
 
-        // --- SÉCURITÉ ---
-        window.unlockForm = function() {
-            const code = document.getElementById('access-code').value;
-            if(code.toLowerCase() === "rosin2026") { // CODE À CHANGER ICI
-                document.getElementById('auth-zone').style.display = 'none';
+        // --- AUTH RSVP ---
+        window.unlockRSVP = () => {
+            const code = document.getElementById('access-code').value.toLowerCase();
+            if(code === "rosin2026") {
+                document.getElementById('auth-check').style.display = 'none';
                 document.getElementById('rsvpForm').style.display = 'block';
-            } else {
-                alert("Code invalide. Veuillez vérifier votre carte d'invitation.");
-            }
+            } else { alert("Code incorrect."); }
         };
 
-        // --- FORMULAIRE & DOUBLONS ---
+        // --- SOUMISSION & ANTI-DOUBLON ---
         document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('fullname').value;
-
-            // Vérifier si déjà inscrit (Sécurité anti-doublon)
-            const q = query(collection(db, "invites"), where("fullname", "==", name));
-            const querySnapshot = await getDocs(q);
+            const name = document.getElementById('guestName').value;
             
-            if (!querySnapshot.empty) {
-                alert("Cet invité est déjà enregistré !");
-                return;
-            }
+            // Verif doublon
+            const q = query(collection(db, "invites"), where("name", "==", name));
+            const snap = await getDocs(q);
+            if(!snap.empty) return alert("Vous êtes déjà inscrit !");
 
-            const docRef = await addDoc(collection(db, "invites"), {
-                fullname: name,
-                guests: document.getElementById('guests').value,
-                timestamp: new Date()
-            });
-
-            generateTicket(docRef.id, name);
+            try {
+                const docRef = await addDoc(collection(db, "invites"), {
+                    name: name,
+                    type: document.getElementById('guestType').value,
+                    relation: document.getElementById('relation').value,
+                    date: new Date()
+                });
+                
+                showPass(docRef.id, name);
+            } catch (err) { alert("Erreur lors de l'envoi."); }
         });
 
-        function generateTicket(id, name) {
+        function showPass(id, name) {
             document.getElementById('rsvpForm').style.display = 'none';
-            document.getElementById('ticket-result').style.display = 'block';
-            document.getElementById('display-name').innerText = name;
-            
-            new QRCode(document.getElementById("qrcode"), {
-                text: id, width: 150, height: 150, colorDark : "#1a1a1a"
-            });
+            document.getElementById('ticket-display').style.display = 'block';
+            document.getElementById('pass-name').innerText = name;
+            new QRCode(document.getElementById("qrcode"), { text: id, width: 150, height: 150 });
         }
 
-        // --- TÉLÉCHARGEMENT ---
-        window.downloadInvitation = function() {
-            const ticket = document.getElementById('printable-invitation');
-            html2canvas(ticket).then(canvas => {
+        window.downloadPass = () => {
+            html2canvas(document.querySelector("#capture-area")).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'Invitation-Concilia-Rosin.png';
+                link.download = 'Pass-Mariage.png';
                 link.href = canvas.toDataURL();
                 link.click();
             });
