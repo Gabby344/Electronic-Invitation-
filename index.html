@@ -3,177 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Gift of Word | Concilia & Rosin</title>
-    
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Invitation | Concilia & Rosin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
         :root {
-            --gold: #C5A059;
-            --off-white: #FCF9F5;
-            --anthracite: #2C2C2C;
-            --soft-gray: #f4f4f4;
+            --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            --dark: #1a1a1a;
+            --glass: rgba(255, 255, 255, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-box: border-box; }
-        body { 
-            font-family: 'Montserrat', sans-serif; 
-            background-color: var(--off-white); 
-            color: var(--anthracite);
-            line-height: 1.6;
-            scroll-behavior: smooth;
+        body { font-family: 'Montserrat', sans-serif; background: #0f0f0f; color: white; overflow-x: hidden; }
+
+        /* --- Carrousel --- */
+        .carousel {
+            position: relative; height: 100vh; width: 100%; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .carousel-slide {
+            position: absolute; width: 100%; height: 100%; opacity: 0;
+            transition: opacity 1.5s ease-in-out; background-size: cover; background-position: center;
+        }
+        .carousel-slide.active { opacity: 1; }
+        .hero-overlay {
+            position: absolute; z-index: 10; text-align: center;
+            background: rgba(0,0,0,0.5); padding: 40px; border-radius: 20px; backdrop-filter: blur(10px);
+            border: 1px solid var(--glass);
         }
 
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        /* --- Textes Surbrillants --- */
+        .shimmer {
+            font-family: 'Playfair Display', serif;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 3s linear infinite;
+        }
+        @keyframes shine { to { background-position: 200% center; } }
 
-        /* --- Hero Section --- */
-        #hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('images/hero-bg.jpg') center/cover no-repeat;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            padding: 20px;
+        /* --- Section RSVP Sécurisée --- */
+        .section-rsvp { padding: 80px 20px; display: flex; justify-content: center; }
+        .rsvp-card {
+            background: white; color: var(--dark); padding: 40px;
+            border-radius: 20px; max-width: 500px; width: 100%; text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-top: 5px; }
+
+        .btn-gold {
+            background: var(--gold-gradient); border: none; padding: 15px 30px;
+            color: var(--dark); font-weight: 700; border-radius: 50px;
+            cursor: pointer; width: 100%; transition: 0.3s;
+        }
+        .btn-gold:hover { transform: scale(1.02); filter: brightness(1.1); }
+
+        /* --- Ticket Digital --- */
+        #ticket-result {
+            display: none; background: #fff; color: #000; padding: 20px;
+            border-radius: 10px; margin-top: 20px; position: relative;
+        }
+        #printable-invitation {
+            background: #fff; padding: 20px; border: 2px solid #BF953F;
         }
 
-        #hero h1 { font-size: 3.5rem; margin-bottom: 10px; letter-spacing: 2px; }
-        #hero p.names { font-size: 1.8rem; font-style: italic; margin-bottom: 30px; }
-
-        .btn {
-            background-color: var(--gold);
-            color: white;
-            padding: 15px 35px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: transform 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        .btn:hover { transform: scale(1.05); background-color: #b08d4a; }
-
-        /* --- Section Couple --- */
-        .section { padding: 80px 20px; text-align: center; max-width: 900px; margin: auto; }
-        .couple-img { 
-            width: 250px; height: 250px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            border: 5px solid var(--gold);
-            margin-bottom: 20px;
-        }
-
-        /* --- Timeline --- */
-        .timeline { margin-top: 40px; text-align: left; border-left: 2px solid var(--gold); padding-left: 20px; margin-left: 20px; }
-        .timeline-item { margin-bottom: 30px; position: relative; }
-        .timeline-item::before {
-            content: ''; position: absolute; left: -31px; top: 5px;
-            width: 20px; height: 20px; background: var(--gold); border-radius: 50%;
-        }
-
-        /* --- Formulaire RSVP --- */
-        #rsvp { background-color: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 40px; margin-top: 40px; }
-        input, select {
-            width: 100%; padding: 12px; margin: 10px 0;
-            border: 1px solid #ddd; border-radius: 8px; font-family: inherit;
-        }
-
-        /* --- Ticket & QR --- */
-        #ticket-display { 
-            display: none; background: white; padding: 30px; 
-            border-radius: 15px; border: 2px dashed var(--gold); margin-top: 20px; 
-        }
-        #qrcode { display: flex; justify-content: center; margin: 20px 0; }
-
-        /* --- Footer --- */
-        footer { font-size: 0.8rem; color: #888; padding: 40px 0; }
-        .creators { font-style: italic; opacity: 0.6; }
-
-        @media (max-width: 600px) {
-            #hero h1 { font-size: 2.2rem; }
-        }
+        .creator-tag { font-size: 0.7rem; opacity: 0.4; margin-top: 50px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <!-- Musique d'ambiance -->
-    <audio id="bg-music" loop>
-        <source src="images/music-bg.mp3" type="audio/mpeg">
-    </audio>
-
-    <section id="hero">
-        <h1>The Gift of Word</h1>
-        <p class="names">Concilia & Rosin</p>
-        <a href="#rsvp-section" class="btn" onclick="playMusic()">Confirmer ma présence</a>
-    </section>
-
-    <section class="section">
-        <h2>Les Mariés</h2>
-        <img src="images/conciliaetrosin.jpg" alt="Concilia et Rosin" class="couple-img">
-        <p>Nous sommes heureux de vous inviter à célébrer notre union.</p>
+    <div class="carousel">
+        <div class="carousel-slide active" style="background-image: url('conciliaetrosin1.jpg')"></div>
+        <div class="carousel-slide" style="background-image: url('conciliaetrosin2.jpg')"></div>
+        <div class="carousel-slide" style="background-image: url('conciliaetrosin3.jpg')"></div>
         
-        <div class="timeline">
-            <div class="timeline-item">
-                <h3>14:00 - Cérémonie</h3>
-                <p>Échange des vœux sous le signe de l'amour.</p>
-            </div>
-            <div class="timeline-item">
-                <h3>17:00 - Réception</h3>
-                <p>Cocktail, dîner et festivités.</p>
-            </div>
+        <div class="hero-overlay">
+            <h1 class="shimmer" style="font-size: 3rem;">Invitation</h1>
+            <p style="font-size: 1.5rem; font-style: italic;">Concilia & Rosin</p>
+            <p style="margin-top: 20px;">Samedi 20 Juin 2026</p>
+            <a href="#rsvp-section" class="btn-gold" style="display:inline-block; margin-top: 30px; width: auto;">Confirmer ma présence</a>
         </div>
-    </section>
+    </div>
 
-    <section class="section" id="rsvp-section">
-        <h2>RSVP</h2>
-        <div id="rsvp">
-            <form id="rsvpForm">
-                <input type="text" id="firstname" placeholder="Prénom" required>
-                <input type="text" id="lastname" placeholder="Nom" required>
-                <select id="relation" required>
-                    <option value="">Votre relation</option>
-                    <option value="Famille">Famille</option>
-                    <option value="Ami">Ami</option>
-                    <option value="VIP">Invité d'honneur</option>
-                </select>
-                <select id="attendance" required>
-                    <option value="Solo">Je viens seul(e)</option>
-                    <option value="Couple">Je viens en couple</option>
-                </select>
-                <input type="text" id="diet" placeholder="Régime ou allergies (Optionnel)">
-                <button type="submit" class="btn" style="width:100%; margin-top:10px;">Générer mon invitation</button>
+    <section class="section-rsvp" id="rsvp-section">
+        <div class="rsvp-card">
+            <h2 class="shimmer" style="font-size: 2rem; margin-bottom: 20px;">RSVP</h2>
+            
+            <!-- Sécurité : Code d'accès -->
+            <div id="auth-zone">
+                <p>Veuillez entrer le code d'invitation reçu :</p>
+                <input type="text" id="access-code" placeholder="Code secret...">
+                <button class="btn-gold" onclick="unlockForm()" style="margin-top:10px;">Accéder au formulaire</button>
+            </div>
+
+            <form id="rsvpForm" style="display: none;">
+                <div class="form-group">
+                    <label>Prénom & Nom</label>
+                    <input type="text" id="fullname" required>
+                </div>
+                <div class="form-group">
+                    <label>Nombre de personnes</label>
+                    <select id="guests">
+                        <option value="1">1 Personne (Solo)</option>
+                        <option value="2">2 Personnes (Couple)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-gold">Obtenir mon Pass QR</button>
             </form>
-        </div>
 
-        <!-- Zone d'affichage du ticket après validation -->
-        <div id="ticket-display">
-            <h3>Félicitations !</h3>
-            <p>Voici votre pass pour l'événement :</p>
-            <div id="qrcode"></div>
-            <p><strong id="guest-name"></strong></p>
-            <p id="guest-id" style="font-size: 0.7rem; color: gray;"></p>
-            <button class="btn" onclick="window.print()" style="margin-top:15px; background:var(--anthracite)">Télécharger mon Pass</button>
+            <div id="ticket-result">
+                <div id="printable-invitation">
+                    <h3 class="shimmer">Invitation Officielle</h3>
+                    <p><strong>Invité:</strong> <span id="display-name"></span></p>
+                    <div id="qrcode" style="display: flex; justify-content: center; margin: 15px 0;"></div>
+                    <p style="font-size: 0.8rem;">Présentez ce QR Code à l'entrée.</p>
+                </div>
+                <button class="btn-gold" onclick="downloadInvitation()" style="margin-top: 15px; background: #000; color: #fff;">Télécharger l'image</button>
+            </div>
         </div>
     </section>
 
-    <section class="section">
-        <h2>Localisation</h2>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3913.38136362391!2d27.4811!3d-11.6669!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTHCsDQwJzAwLjgiUyAyN8KwMjgnNTEuOSJF!5e0!3m2!1sfr!2scd!4v1714730000000" width="100%" height="300" style="border:0; border-radius:15px;" allowfullscreen="" loading="lazy"></iframe>
-    </section>
+    <p class="creator-tag">Créé par Gabby U & Vainqueur</p>
 
-    <footer>
-        <p>&copy; 2026 The Gift of Word - Concilia & Rosin</p>
-        <p class="creators">Conçu avec soin par Gabby U & Vainqueur</p>
-    </footer>
-
-    <!-- FIREBASE LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyASCqKVU-tchKTnjkwemo_8DORutXiGQCc",
@@ -187,61 +144,69 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Gestion du formulaire
-        const rsvpForm = document.getElementById('rsvpForm');
-        
-        rsvpForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const btn = e.target.querySelector('button');
-            btn.innerText = "Enregistrement...";
-            btn.disabled = true;
+        // --- CARROUSEL ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 4000);
 
-            const guestData = {
-                firstname: document.getElementById('firstname').value,
-                lastname: document.getElementById('lastname').value,
-                relation: document.getElementById('relation').value,
-                attendance: document.getElementById('attendance').value,
-                diet: document.getElementById('diet').value,
-                timestamp: serverTimestamp()
-            };
-
-            try {
-                // Initialisation automatique : Firestore crée la collection 'invites' au premier ajout
-                const docRef = await addDoc(collection(db, "invites"), guestData);
-                console.log("Document écrit avec l'ID: ", docRef.id);
-                
-                showTicket(docRef.id, guestData.firstname);
-            } catch (error) {
-                alert("Erreur lors de l'envoi : " + error.message);
-                btn.innerText = "Réessayer";
-                btn.disabled = false;
+        // --- SÉCURITÉ ---
+        window.unlockForm = function() {
+            const code = document.getElementById('access-code').value;
+            if(code.toLowerCase() === "rosin2026") { // CODE À CHANGER ICI
+                document.getElementById('auth-zone').style.display = 'none';
+                document.getElementById('rsvpForm').style.display = 'block';
+            } else {
+                alert("Code invalide. Veuillez vérifier votre carte d'invitation.");
             }
+        };
+
+        // --- FORMULAIRE & DOUBLONS ---
+        document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('fullname').value;
+
+            // Vérifier si déjà inscrit (Sécurité anti-doublon)
+            const q = query(collection(db, "invites"), where("fullname", "==", name));
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+                alert("Cet invité est déjà enregistré !");
+                return;
+            }
+
+            const docRef = await addDoc(collection(db, "invites"), {
+                fullname: name,
+                guests: document.getElementById('guests').value,
+                timestamp: new Date()
+            });
+
+            generateTicket(docRef.id, name);
         });
 
-        function showTicket(id, name) {
-            document.getElementById('rsvp').style.display = 'none';
-            document.getElementById('ticket-display').style.display = 'block';
-            document.getElementById('guest-name').innerText = name;
-            document.getElementById('guest-id').innerText = "Réf : " + id;
-
-            // Génération du QR Code
+        function generateTicket(id, name) {
+            document.getElementById('rsvpForm').style.display = 'none';
+            document.getElementById('ticket-result').style.display = 'block';
+            document.getElementById('display-name').innerText = name;
+            
             new QRCode(document.getElementById("qrcode"), {
-                text: id,
-                width: 180,
-                height: 180,
-                colorDark : "#2C2C2C",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
+                text: id, width: 150, height: 150, colorDark : "#1a1a1a"
             });
         }
-    </script>
 
-    <script>
-        function playMusic() {
-            const music = document.getElementById('bg-music');
-            music.play().catch(e => console.log("Audio en attente d'interaction"));
-        }
+        // --- TÉLÉCHARGEMENT ---
+        window.downloadInvitation = function() {
+            const ticket = document.getElementById('printable-invitation');
+            html2canvas(ticket).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Invitation-Concilia-Rosin.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        };
     </script>
 </body>
 </html>
