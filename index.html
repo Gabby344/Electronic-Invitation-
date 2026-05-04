@@ -2,132 +2,736 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitation de Mariage | Rosin & Concilia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="Invitation au mariage de Rosin & Concilia - 20 Juin 2026 à Lubumbashi">
+    <title>Rosin & Concilia | Notre Mariage</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Librairies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        :root {
-            --gold: #C5A059;
-            --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            --dark: #1a1a1a;
-            --white: #ffffff;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Montserrat', sans-serif; background: #fafafa; color: var(--dark); overflow-x: hidden; }
+        :root {
+            --gold-primary: #C5A059;
+            --gold-light: #E8D5A3;
+            --gold-dark: #9B7B3A;
+            --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            --dark: #1A1A2E;
+            --dark-light: #16213E;
+            --white: #FFFFFF;
+            --cream: #FFF9F0;
+            --shadow: 0 20px 40px rgba(0,0,0,0.1);
+            --shadow-hover: 0 25px 50px rgba(0,0,0,0.15);
+            --success: #2ECC71;
+            --error: #E74C3C;
+            --warning: #F39C12;
+        }
 
-        /* --- Hero & Carrousel --- */
-        .hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; color: white; text-align: center; }
-        .carousel-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        .slide { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: 1.5s; }
-        .slide.active { opacity: 1; }
-        .hero-overlay { background: rgba(0,0,0,0.4); padding: 30px; border-radius: 15px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); }
-        
-        .shimmer { font-family: 'Playfair Display', serif; background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s infinite; background-size: 200%; }
-        @keyframes shine { to { background-position: 200% center; } }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--cream);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
 
-        /* --- Sections --- */
-        section { padding: 80px 10%; text-align: center; }
-        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); margin-top: -50px; position: relative; z-index: 20; }
-        
-        h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 20px; color: var(--gold); }
-        .info-box { margin: 20px 0; line-height: 1.8; }
+        /* Scrollbar personnalisée */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
 
-        /* --- Formulaire --- */
-        .form-group { margin-bottom: 15px; text-align: left; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
-        .btn-gold { background: var(--gold-gradient); border: none; padding: 15px 30px; color: var(--dark); font-weight: 700; border-radius: 50px; cursor: pointer; width: 100%; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(191, 149, 63, 0.3); }
+        ::-webkit-scrollbar-track {
+            background: var(--cream);
+        }
 
-        /* --- Ticket --- */
-        #ticket-display { display: none; margin-top: 30px; background: white; padding: 20px; border: 2px dashed var(--gold); border-radius: 10px; }
-        #qrcode { display: flex; justify-content: center; margin: 20px 0; }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-primary);
+            border-radius: 4px;
+        }
 
-        .footer-dev { font-size: 0.6rem; opacity: 0.5; margin-top: 40px; letter-spacing: 2px; }
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .hero-bg .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .hero-bg .slide.active {
+            opacity: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(2px);
+            z-index: -1;
+        }
+
+        .hero-content {
+            z-index: 10;
+            padding: 40px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .shimmer {
+            font-family: 'Playfair Display', serif;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s infinite;
+            background-size: 200%;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -100% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2rem, 8vw, 4.5rem);
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .hero-content .couple-name {
+            font-size: clamp(1.2rem, 5vw, 2rem);
+            letter-spacing: 6px;
+            font-weight: 300;
+        }
+
+        .hero-content .date-glow {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            margin-top: 25px;
+            color: var(--gold-light);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 8%;
+        }
+
+        .card {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            margin-top: -80px;
+            position: relative;
+            z-index: 20;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            margin-bottom: 30px;
+            color: var(--gold-primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        h2:after {
+            content: '✦';
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--gold-primary);
+        }
+
+        h2:before {
+            content: '✦';
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--gold-primary);
+        }
+
+        .info-box {
+            margin: 30px 0;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        hr {
+            width: 80px;
+            margin: 40px auto;
+            border: 1px solid var(--gold-primary);
+        }
+
+        /* Formulaire */
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
+            background: white;
+        }
+
+        input:read-only {
+            background: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        /* Boissons */
+        .drinks-section {
+            background: linear-gradient(135deg, #f8f4e8, #fff8f0);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .drinks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .drink-option {
+            background: white;
+            padding: 12px;
+            border-radius: 50px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .drink-option i {
+            font-size: 1.2rem;
+            color: var(--gold-primary);
+        }
+
+        .drink-option.selected {
+            background: var(--gold-gradient);
+            border-color: var(--gold-dark);
+            color: var(--dark);
+        }
+
+        .drink-option.selected i {
+            color: var(--dark);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            width: auto;
+        }
+
+        .btn-gold {
+            background: var(--gold-gradient);
+            border: none;
+            padding: 16px 35px;
+            color: var(--dark);
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(191, 149, 63, 0.4);
+        }
+
+        .btn-gold:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Ticket */
+        #ticket-display {
+            display: none;
+            margin-top: 40px;
+            background: linear-gradient(135deg, #fff 0%, #fef9e6 100%);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px dashed var(--gold-primary);
+            position: relative;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #capture-area {
+            text-align: center;
+        }
+
+        #capture-area h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            margin: 25px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            display: inline-flex;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .ticket-info {
+            background: rgba(197, 160, 89, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .download-btn {
+            background: none;
+            border: 2px solid var(--gold-primary);
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .download-btn:hover {
+            background: var(--gold-primary);
+            color: white;
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .timeline-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+
+        /* Map */
+        .map-container {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 400px;
+            border: 0;
+        }
+
+        /* Welcome message */
+        .welcome-message {
+            background: linear-gradient(135deg, var(--gold-light), #fff);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .welcome-message p {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.success { background: var(--success); }
+        .notification.error { background: var(--error); }
+        .notification.info { background: var(--warning); }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer-dev {
+            text-align: center;
+            padding: 30px;
+            font-size: 0.7rem;
+            opacity: 0.6;
+            letter-spacing: 2px;
+            background: var(--dark);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            section { padding: 50px 5%; }
+            .card { padding: 25px; margin-top: -60px; }
+            h2:before, h2:after { display: none; }
+            .timeline-item { min-width: 140px; }
+            .drinks-grid { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Hero Section -->
     <div class="hero">
-        <div class="carousel-bg">
+        <div class="hero-bg">
             <div class="slide active" style="background-image: url('conciliaetrosin1.jpg')"></div>
             <div class="slide" style="background-image: url('conciliaetrosin2.jpg')"></div>
             <div class="slide" style="background-image: url('conciliaetrosin3.jpg')"></div>
         </div>
-        <div class="hero-overlay">
-            <h1 class="shimmer" style="font-size: 3.5rem;">Invitation</h1>
-            <p style="font-size: 1.2rem; letter-spacing: 3px;">ROSIN & CONCILIA</p>
-            <p style="margin-top: 15px;">20 JUIN 2026 | LUBUMBASHI</p>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="shimmer">Notre Mariage</h1>
+            <div class="couple-name">ROSIN <span style="font-family: serif;">&</span> CONCILIA</div>
+            <div class="date-glow">
+                <i class="fas fa-calendar-alt"></i> 20 JUIN 2026 
+                <span style="margin: 0 10px;">|</span> 
+                <i class="fas fa-map-marker-alt"></i> LUBUMBASHI
+            </div>
         </div>
     </div>
 
+    <!-- RSVP Section -->
     <section id="rsvp">
         <div class="card">
-            <h2>RSVP</h2>
-            <div id="auth-check">
-                <p>Veuillez entrer le code d'accès personnel pour confirmer votre présence.</p>
-                <input type="text" id="access-code" placeholder="Code secret (ex: Rosin2026)" style="text-align: center; margin: 20px 0;">
-                <button class="btn-gold" onclick="unlockRSVP()">Accéder au formulaire</button>
+            <div class="welcome-message">
+                <i class="fas fa-heart" style="color: var(--gold-primary); font-size: 2rem; margin-bottom: 15px; display: inline-block;"></i>
+                <p>“L'amour est la seule chose qui grandit quand on la partage.”</p>
+                <p style="margin-top: 10px;">Nous sommes ravis de vous accueillir à notre union. Merci de confirmer votre présence ci-dessous.</p>
             </div>
 
+            <h2>Confirmation de Présence</h2>
+            
+            <!-- Étape 1: Code d'accès -->
+            <div id="auth-check">
+                <p style="margin-bottom: 20px;">Veuillez entrer votre <strong>code d'accès personnel</strong> pour confirmer votre présence.</p>
+                <div class="form-group">
+                    <label><i class="fas fa-key"></i> Code d'accès</label>
+                    <input type="text" id="access-code" placeholder="Ex: ROS-ABC123" style="text-align: center; font-family: monospace; font-size: 1.1rem; letter-spacing: 1px;">
+                </div>
+                <button class="btn-gold" id="unlock-btn">
+                    <i class="fas fa-unlock-alt"></i> Accéder au formulaire
+                </button>
+            </div>
+
+            <!-- Étape 2: Formulaire -->
             <form id="rsvpForm" style="display: none;">
                 <div class="form-group">
-                    <label>Nom complet</label>
+                    <label><i class="fas fa-user"></i> Nom complet *</label>
                     <input type="text" id="guestName" required placeholder="Ex: Jean Mukendi">
                 </div>
+                
                 <div class="form-group">
-                    <label>Vous venez en :</label>
+                    <label><i class="fas fa-venus-mars"></i> Sexe *</label>
+                    <select id="gender">
+                        <option value="Homme">Homme</option>
+                        <option value="Femme">Femme</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-users"></i> Type de présence *</label>
                     <select id="guestType">
                         <option value="Solo">Solo</option>
-                        <option value="Couple">Couple</option>
+                        <option value="Couple">En couple</option>
+                        <option value="Famille">Avec famille</option>
                     </select>
                 </div>
+
                 <div class="form-group">
-                    <label>Relation</label>
+                    <label><i class="fas fa-handshake"></i> Relation avec les mariés *</label>
                     <select id="relation">
-                        <option value="Famille">Famille</option>
-                        <option value="Ami">Ami(e)</option>
+                        <option value="Famille proche">Famille proche</option>
+                        <option value="Famille éloignée">Famille éloignée</option>
+                        <option value="Ami proche">Ami(e) proche</option>
+                        <option value="Ami(e)">Ami(e)</option>
                         <option value="Collègue">Collègue</option>
-                        <option value="VIP">VIP</option>
+                        <option value="VIP">VIP / Invité d'honneur</option>
                     </select>
                 </div>
-                <button type="submit" class="btn-gold">Confirmer & Générer mon Pass</button>
+
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> Téléphone *</label>
+                    <input type="tel" id="phone" required placeholder="+243 XXX XXX XXX">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Email (optionnel)</label>
+                    <input type="email" id="email" placeholder="exemple@email.com">
+                </div>
+
+                <div class="drinks-section">
+                    <label><i class="fas fa-glass-cheers"></i> Vos préférences de boissons</label>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">Sélectionnez vos boissons préférées (plusieurs choix possibles)</p>
+                    <div class="drinks-grid" id="drinks-grid">
+                        <div class="drink-option" data-drink="Whisky"><i class="fas fa-whiskey-glass"></i> Whisky</div>
+                        <div class="drink-option" data-drink="Tembo"><i class="fas fa-beer"></i> Tembo</div>
+                        <div class="drink-option" data-drink="Coca"><i class="fas fa-cola"></i> Coca</div>
+                        <div class="drink-option" data-drink="Champagne"><i class="fas fa-champagne-glasses"></i> Champagne</div>
+                        <div class="drink-option" data-drink="Jus"><i class="fas fa-apple-alt"></i> Jus</div>
+                        <div class="drink-option" data-drink="Eau"><i class="fas fa-tint"></i> Eau</div>
+                    </div>
+                    <input type="hidden" id="selectedDrinks" value="">
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="needHotel"> <i class="fas fa-hotel"></i> J'ai besoin d'aide pour l'hébergement
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="needTransport"> <i class="fas fa-car"></i> J'ai besoin d'aide pour le transport
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-gold" id="submit-btn">
+                    <i class="fas fa-check-circle"></i> Confirmer ma présence
+                </button>
             </form>
 
+            <!-- Étape 3: Ticket -->
             <div id="ticket-display">
                 <div id="capture-area">
-                    <h3 class="shimmer">PASS ENTRÉE</h3>
-                    <p>Invité: <strong id="pass-name"></strong></p>
+                    <h3 class="shimmer"><i class="fas fa-ticket-alt"></i> PASS ENTRÉE</h3>
+                    <div class="ticket-info">
+                        <p><strong>Invité(e):</strong> <span id="pass-name"></span></p>
+                        <p><strong>Table attribuée:</strong> <span id="pass-table"></span></p>
+                        <p><strong>Préférences:</strong> <span id="pass-drinks"></span></p>
+                    </div>
                     <div id="qrcode"></div>
-                    <p style="font-size: 0.8rem;">Samedi 20 Juin 2026 - 19h00</p>
+                    <p style="font-size: 0.8rem; margin-top: 10px;">
+                        <i class="fas fa-calendar-check"></i> Samedi 20 Juin 2026 - 19h00<br>
+                        Salle Aurore, Lubumbashi
+                    </p>
+                    <p style="font-size: 0.7rem; color: #999; margin-top: 10px;">
+                        <i class="fas fa-shield-alt"></i> Ce billet est nominatif et ne peut être utilisé qu'une seule fois
+                    </p>
                 </div>
-                <button onclick="downloadPass()" style="margin-top: 15px; cursor: pointer; background: none; border: 1px solid #ccc; padding: 5px 10px; border-radius: 5px;">Télécharger mon Pass</button>
+                <button class="download-btn" id="download-pass-btn">
+                    <i class="fas fa-download"></i> Télécharger mon Pass
+                </button>
             </div>
         </div>
     </section>
 
+    <!-- Programme Section -->
     <section style="background: white;">
-        <h2 class="shimmer">Programme</h2>
-        <div class="info-box">
-            <p><strong>14H00 :</strong> Bénédiction Nuptiale<br>Paroisse Saint Laurent, Route Kipopo, Lubumbashi</p>
-            <hr style="width: 50px; margin: 20px auto; border: 1px solid var(--gold);">
-            <p><strong>19H00 :</strong> Soirée Dansante<br>Salle Aurore, Avenue du 30 Juin, Lubumbashi</p>
+        <h2><i class="fas fa-calendar-week"></i> Programme de la Cérémonie</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-church"></i></div>
+                <h3>14:00</h3>
+                <p>Bénédiction Nuptiale<br>Paroisse Saint Laurent</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-camera"></i></div>
+                <h3>16:00</h3>
+                <p>Séance Photo<br>Avec les proches</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-music"></i></div>
+                <h3>19:00</h3>
+                <p>Soirée Dansante<br>Salle Aurore</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-utensils"></i></div>
+                <h3>21:00</h3>
+                <p>Dîner & Gâteau<br>Service traiteur</p>
+            </div>
         </div>
-        <div style="margin-top: 30px;">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15636.56826645318!2d27.4794!3d-11.6667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTHCsDQwJzAwLjAiUyAyN8KwMjgnNDUuOCJF!5e0!3m2!1sfr!2scd!4v1700000000000" width="100%" height="300" style="border:0; border-radius: 15px;" allowfullscreen="" loading="lazy"></iframe>
+
+        <hr>
+
+        <h2><i class="fas fa-map-marked-alt"></i> Lieux de la Célébration</h2>
+        <div class="info-box">
+            <p><strong><i class="fas fa-church"></i> Cérémonie religieuse:</strong><br>
+            Paroisse Saint Laurent, Route Kipopo, Lubumbashi</p>
+            <p><strong><i class="fas fa-music"></i> Réception:</strong><br>
+            Salle Aurore, Avenue du 30 Juin, Lubumbashi</p>
+            <p><strong><i class="fas fa-clock"></i> Heure d'arrivée recommandée:</strong><br>
+            Merci d'arriver 15 minutes avant le début de chaque cérémonie</p>
+        </div>
+
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31344.426563251906!2d27.4794!3d-11.6667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1973c5a5d4c5b5c5%3A0x0!2zMTDCsDQwJzAwLjAiUyAyN8KwMjgnNDUuOCJF!5e0!3m2!1sfr!2scd!4v1700000000000" 
+                allowfullscreen="" 
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
         </div>
     </section>
 
-    <div class="footer-dev">DESIGNED BY GABBY U & VAINQUEUR</div>
+    <div class="footer-dev">
+        <i class="fas fa-heart" style="color: var(--gold-primary);"></i><br>
+        DESIGNED WITH LOVE BY GABBY U & VAINQUEUR<br>
+        © 2026 Rosin & Concilia - Tous droits réservés
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // Configuration Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyASCqKVU-tchKTnjkwemo_8DORutXiGQCc",
             authDomain: "invitation-electronic.firebaseapp.com",
@@ -140,61 +744,214 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- CARROUSEL ---
+        // ========== CARROUSEL ==========
         let slideIndex = 0;
         const slides = document.querySelectorAll('.slide');
-        setInterval(() => {
-            slides[slideIndex].classList.remove('active');
-            slideIndex = (slideIndex + 1) % slides.length;
-            slides[slideIndex].classList.add('active');
-        }, 4000);
-
-        // --- AUTH RSVP ---
-        window.unlockRSVP = () => {
-            const code = document.getElementById('access-code').value.toLowerCase();
-            if(code === "rosin2026") {
-                document.getElementById('auth-check').style.display = 'none';
-                document.getElementById('rsvpForm').style.display = 'block';
-            } else { alert("Code incorrect."); }
-        };
-
-        // --- SOUMISSION & ANTI-DOUBLON ---
-        document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('guestName').value;
-            
-            // Verif doublon
-            const q = query(collection(db, "invites"), where("name", "==", name));
-            const snap = await getDocs(q);
-            if(!snap.empty) return alert("Vous êtes déjà inscrit !");
-
-            try {
-                const docRef = await addDoc(collection(db, "invites"), {
-                    name: name,
-                    type: document.getElementById('guestType').value,
-                    relation: document.getElementById('relation').value,
-                    date: new Date()
-                });
-                
-                showPass(docRef.id, name);
-            } catch (err) { alert("Erreur lors de l'envoi."); }
-        });
-
-        function showPass(id, name) {
-            document.getElementById('rsvpForm').style.display = 'none';
-            document.getElementById('ticket-display').style.display = 'block';
-            document.getElementById('pass-name').innerText = name;
-            new QRCode(document.getElementById("qrcode"), { text: id, width: 150, height: 150 });
+        if (slides.length > 0) {
+            setInterval(() => {
+                slides[slideIndex].classList.remove('active');
+                slideIndex = (slideIndex + 1) % slides.length;
+                slides[slideIndex].classList.add('active');
+            }, 5000);
         }
 
-        window.downloadPass = () => {
-            html2canvas(document.querySelector("#capture-area")).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'Pass-Mariage.png';
-                link.href = canvas.toDataURL();
-                link.click();
+        // ========== SÉLECTION DES BOISSONS ==========
+        let selectedDrinksArray = [];
+        const drinkOptions = document.querySelectorAll('.drink-option');
+        drinkOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const drink = option.dataset.drink;
+                if (option.classList.contains('selected')) {
+                    option.classList.remove('selected');
+                    selectedDrinksArray = selectedDrinksArray.filter(d => d !== drink);
+                } else {
+                    option.classList.add('selected');
+                    selectedDrinksArray.push(drink);
+                }
+                document.getElementById('selectedDrinks').value = selectedDrinksArray.join(', ');
             });
-        };
+        });
+
+        // ========== TABLES DISPONIBLES ==========
+        const tables = ['fantan', 'coca', 'temba', 'wisky', 'champagne', 'elanc', 'sansbo'];
+        
+        function assignTable() {
+            return tables[Math.floor(Math.random() * tables.length)];
+        }
+
+        // ========== NOTIFICATION ==========
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${message}`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 4000);
+        }
+
+        // ========== AFFICHER LE TICKET ==========
+        function showPass(id, name, table, drinks) {
+            document.getElementById('ticket-display').style.display = 'block';
+            document.getElementById('pass-name').innerText = name;
+            document.getElementById('pass-table').innerText = table || "fantan";
+            document.getElementById('pass-drinks').innerText = drinks || "À définir";
+            
+            const qrcodeDiv = document.getElementById('qrcode');
+            qrcodeDiv.innerHTML = "";
+            
+            const qrData = JSON.stringify({
+                id: id,
+                name: name,
+                table: table,
+                drinks: drinks,
+                event: "Rosin & Concilia Mariage",
+                date: "2026-06-20"
+            });
+            
+            new QRCode(qrcodeDiv, { 
+                text: qrData, 
+                width: 180, 
+                height: 180,
+                colorDark: "#1A1A2E",
+                colorLight: "#FFFFFF"
+            });
+        }
+
+        // ========== TÉLÉCHARGER LE PASS ==========
+        document.getElementById('download-pass-btn').addEventListener('click', () => {
+            const element = document.querySelector("#capture-area");
+            html2canvas(element, {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Pass-Mariage-${document.getElementById('pass-name').innerText}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showNotification("Pass téléchargé avec succès !", "success");
+            }).catch(err => {
+                console.error("Erreur:", err);
+                showNotification("Impossible de télécharger l'image", "error");
+            });
+        });
+
+        // ========== DÉVERROUILLAGE AVEC CODE UNIQUE ==========
+        let currentInviteId = null;
+        let currentInviteData = null;
+
+        document.getElementById('unlock-btn').addEventListener('click', async () => {
+            const code = document.getElementById('access-code').value.trim().toUpperCase();
+            const btn = document.getElementById('unlock-btn');
+            
+            if (!code) {
+                showNotification("Veuillez entrer votre code d'accès", "error");
+                return;
+            }
+
+            btn.innerHTML = '<span class="loading"></span> Vérification...';
+            btn.disabled = true;
+
+            try {
+                const q = query(collection(db, "invites"), where("uniqueCode", "==", code));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    showNotification("❌ Code d'accès invalide. Veuillez vérifier votre invitation.", "error");
+                    btn.innerHTML = '<i class="fas fa-unlock-alt"></i> Accéder au formulaire';
+                    btn.disabled = false;
+                    return;
+                }
+
+                const inviteDoc = snapshot.docs[0];
+                const inviteData = inviteDoc.data();
+
+                if (inviteData.isScanned === true) {
+                    showNotification("⚠️ Ce code a déjà été utilisé à l'entrée. Contactez les organisateurs.", "error");
+                    btn.innerHTML = '<i class="fas fa-unlock-alt"></i> Accéder au formulaire';
+                    btn.disabled = false;
+                    return;
+                }
+
+                if (inviteData.isConfirmed === true) {
+                    showNotification("✅ Vous avez déjà confirmé votre présence ! Voici votre pass.", "success");
+                    showPass(inviteDoc.id, inviteData.name, inviteData.table, inviteData.drinks);
+                    document.getElementById('auth-check').style.display = 'none';
+                    document.getElementById('rsvpForm').style.display = 'none';
+                    btn.innerHTML = '<i class="fas fa-unlock-alt"></i> Accéder au formulaire';
+                    btn.disabled = false;
+                    return;
+                }
+
+                currentInviteId = inviteDoc.id;
+                currentInviteData = inviteData;
+                
+                document.getElementById('guestName').value = inviteData.name || '';
+                document.getElementById('guestName').readOnly = true;
+                
+                document.getElementById('auth-check').style.display = 'none';
+                document.getElementById('rsvpForm').style.display = 'block';
+                
+                showNotification(`👋 Bienvenue ${inviteData.name || 'cher invité'} ! Veuillez compléter vos informations.`, "success");
+                
+            } catch (err) {
+                console.error(err);
+                showNotification("Erreur de connexion. Réessayez.", "error");
+            }
+            
+            btn.innerHTML = '<i class="fas fa-unlock-alt"></i> Accéder au formulaire';
+            btn.disabled = false;
+        });
+
+        // ========== SOUMISSION DU FORMULAIRE ==========
+        document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.innerHTML = '<span class="loading"></span> Envoi en cours...';
+            submitBtn.disabled = true;
+            
+            const name = document.getElementById('guestName').value;
+            const gender = document.getElementById('gender').value;
+            const guestType = document.getElementById('guestType').value;
+            const relation = document.getElementById('relation').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const drinks = document.getElementById('selectedDrinks').value || "Non spécifié";
+            const needHotel = document.getElementById('needHotel').checked;
+            const needTransport = document.getElementById('needTransport').checked;
+            const table = assignTable();
+
+            try {
+                if (currentInviteId) {
+                    const inviteRef = doc(db, "invites", currentInviteId);
+                    await updateDoc(inviteRef, {
+                        gender: gender,
+                        type: guestType,
+                        relation: relation,
+                        phone: phone,
+                        email: email,
+                        drinks: drinks,
+                        needHotel: needHotel,
+                        needTransport: needTransport,
+                        table: table,
+                        isConfirmed: true,
+                        confirmationDate: new Date()
+                    });
+                    
+                    showPass(currentInviteId, name, table, drinks);
+                    document.getElementById('rsvpForm').style.display = 'none';
+                    showNotification("✅ Merci ! Votre présence a été confirmée avec succès.", "success");
+                } else {
+                    throw new Error("Aucun code d'invitation trouvé");
+                }
+            } catch (err) {
+                console.error(err);
+                showNotification("❌ Une erreur est survenue : " + err.message, "error");
+            }
+            
+            submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirmer ma présence';
+            submitBtn.disabled = false;
+        });
     </script>
 </body>
 </html>
