@@ -3,183 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Génération des codes | Rosin & Concilia</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Générateur de codes | Rosin & Concilia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 30px;
-            padding: 40px;
-            max-width: 800px;
-            width: 100%;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
-
-        h1 {
-            color: #C5A059;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .info-box {
-            background: #f0f2f5;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-
-        .info-box p {
-            margin: 10px 0;
-            color: #333;
-        }
-
-        .stats {
-            background: linear-gradient(135deg, #C5A059, #9B7B3A);
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .stats .number {
-            font-size: 3rem;
-            font-weight: 700;
-        }
-
-        button {
-            background: linear-gradient(135deg, #C5A059, #9B7B3A);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            width: 100%;
-            transition: transform 0.3s;
-            margin-bottom: 20px;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .log-container {
-            background: #1e1e2e;
-            border-radius: 15px;
-            padding: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            font-family: monospace;
-            font-size: 0.85rem;
-        }
-
-        .log-entry {
-            padding: 5px 0;
-            border-bottom: 1px solid #333;
-            color: #ccc;
-        }
-
-        .log-entry.success {
-            color: #2ECC71;
-        }
-
-        .log-entry.error {
-            color: #E74C3C;
-        }
-
-        .log-entry.info {
-            color: #3498DB;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #fff;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.6s linear infinite;
-            margin-right: 10px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .btn-secondary {
-            background: #3498DB;
-            margin-top: 10px;
-        }
-
-        .btn-secondary:hover {
-            background: #2980b9;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background: linear-gradient(135deg, #1A1A2E, #16213E); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { background: white; border-radius: 30px; padding: 40px; max-width: 800px; width: 100%; }
+        h1 { color: #C5A059; text-align: center; margin-bottom: 10px; }
+        .info { background: #f0f2f5; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+        .stats { background: linear-gradient(135deg, #C5A059, #9B7B3A); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 20px; }
+        .stats .number { font-size: 3rem; font-weight: 700; }
+        button { background: linear-gradient(135deg, #C5A059, #9B7B3A); border: none; padding: 14px; border-radius: 50px; color: white; font-weight: 600; width: 100%; cursor: pointer; margin-bottom: 15px; }
+        .log { background: #1e1e2e; border-radius: 15px; padding: 15px; max-height: 300px; overflow-y: auto; font-family: monospace; color: #ccc; }
+        .log-entry { padding: 5px 0; border-bottom: 1px solid #333; }
+        .log-entry.success { color: #2ECC71; }
+        .loading { display: inline-block; width: 16px; height: 16px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.6s linear infinite; margin-right: 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1><i class="fas fa-key"></i> Générateur de codes uniques</h1>
-        <p class="subtitle">Rosin & Concilia - Mariage 2026</p>
-
-        <div class="info-box">
-            <p><i class="fas fa-info-circle"></i> <strong>À quoi servent ces codes ?</strong></p>
-            <p>Chaque invité reçoit un code unique qu'il devra utiliser pour confirmer sa présence. Ce code sera également intégré dans son QR code d'entrée.</p>
-            <p><i class="fas fa-shield-alt"></i> <strong>Sécurité :</strong> Un code ne peut être utilisé qu'une seule fois.</p>
-        </div>
-
-        <div class="stats" id="stats-area">
-            <p>📊 Statut de la base de données</p>
+        <h1><i class="fas fa-key"></i> Génération de codes</h1>
+        <p style="text-align: center; margin-bottom: 20px;">Rosin & Concilia - Mariage 2026</p>
+        <div class="stats">
+            <p>📊 Invités</p>
             <div class="number" id="guestCount">—</div>
             <p id="codeStatus">Chargement...</p>
         </div>
-
-        <button id="generateBtn" onclick="generateAllCodes()">
-            <i class="fas fa-magic"></i> Générer tous les codes manquants
-        </button>
-
-        <button id="exportCodesBtn" class="btn-secondary" onclick="exportCodes()">
-            <i class="fas fa-download"></i> Exporter la liste des codes (CSV)
-        </button>
-
-        <div class="log-container" id="logContainer">
-            <div class="log-entry info">🟢 Prêt. Cliquez sur "Générer" pour commencer.</div>
-        </div>
+        <button id="generateBtn"><i class="fas fa-magic"></i> Générer tous les codes manquants</button>
+        <div class="log" id="log"><div class="log-entry">🟢 Prêt</div></div>
     </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
         const firebaseConfig = {
             apiKey: "AIzaSyASCqKVU-tchKTnjkwemo_8DORutXiGQCc",
             authDomain: "invitation-electronic.firebaseapp.com",
@@ -188,134 +45,38 @@
             messagingSenderId: "896364908517",
             appId: "1:896364908517:web:61c45584bac322b8a0690c"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        let allGuests = [];
-        let generatedCodesList = [];
-
-        function addLog(message, type = 'info') {
-            const logContainer = document.getElementById('logContainer');
-            const logEntry = document.createElement('div');
-            logEntry.className = `log-entry ${type}`;
-            const timestamp = new Date().toLocaleTimeString();
-            logEntry.innerHTML = `[${timestamp}] ${message}`;
-            logContainer.appendChild(logEntry);
-            logContainer.scrollTop = logContainer.scrollHeight;
+        function addLog(msg,type){ let l=document.getElementById('log'); let d=document.createElement('div'); d.className=`log-entry ${type}`; d.innerText=`[${new Date().toLocaleTimeString()}] ${msg}`; l.appendChild(d); l.scrollTop=l.scrollHeight; }
+        async function loadStats(){
+            let snap=await getDocs(collection(db,"invites"));
+            let total=snap.size, withCodes=0;
+            snap.forEach(d=>{ if(d.data().uniqueCode) withCodes++; });
+            document.getElementById('guestCount').innerText=total;
+            document.getElementById('codeStatus').innerHTML=`✅ ${withCodes} codes | ⚠️ ${total-withCodes} manquants`;
+            return {total,withCodes,withoutCodes:total-withCodes};
         }
-
-        async function loadStats() {
-            try {
-                const snapshot = await getDocs(collection(db, "invites"));
-                allGuests = [];
-                snapshot.forEach(doc => {
-                    allGuests.push({ id: doc.id, ...doc.data() });
-                });
-                
-                const total = allGuests.length;
-                const withCodes = allGuests.filter(g => g.uniqueCode).length;
-                const withoutCodes = total - withCodes;
-                
-                document.getElementById('guestCount').innerText = total;
-                document.getElementById('codeStatus').innerHTML = `✅ ${withCodes} codes existants | ⚠️ ${withoutCodes} manquants`;
-                
-                addLog(`📊 Base chargée: ${total} invités, ${withCodes} ont déjà un code, ${withoutCodes} en ont besoin`, 'info');
-                
-                return { total, withCodes, withoutCodes };
-            } catch (err) {
-                addLog(`❌ Erreur de chargement: ${err.message}`, 'error');
-                return { total: 0, withCodes: 0, withoutCodes: 0 };
-            }
-        }
-
-        function generateUniqueCode(name, index) {
-            const namePrefix = name ? name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X') : 'INV';
-            const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
-            const timestamp = Date.now().toString().slice(-4);
-            return `${namePrefix}-${randomPart}-${timestamp}`;
-        }
-
-        window.generateAllCodes = async () => {
-            const btn = document.getElementById('generateBtn');
-            btn.innerHTML = '<span class="loading"></span> Génération en cours...';
-            btn.disabled = true;
-            
-            generatedCodesList = [];
-            addLog("🚀 Début de la génération des codes...", 'info');
-            
-            const guestsWithoutCode = allGuests.filter(g => !g.uniqueCode);
-            
-            if (guestsWithoutCode.length === 0) {
-                addLog("✅ Tous les invités ont déjà un code !", 'success');
-                btn.innerHTML = '<i class="fas fa-magic"></i> Générer tous les codes manquants';
-                btn.disabled = false;
-                return;
-            }
-            
-            addLog(`📝 ${guestsWithoutCode.length} codes à générer...`, 'info');
-            
-            let successCount = 0;
-            let errorCount = 0;
-            
-            for (let i = 0; i < guestsWithoutCode.length; i++) {
-                const guest = guestsWithoutCode[i];
-                const code = generateUniqueCode(guest.name, i);
-                
-                try {
-                    await updateDoc(doc(db, "invites", guest.id), { 
-                        uniqueCode: code,
-                        isConfirmed: guest.isConfirmed || false,
-                        isScanned: guest.isScanned || false
-                    });
-                    
-                    generatedCodesList.push({
-                        name: guest.name || 'Invité',
-                        phone: guest.phone || '',
-                        code: code,
-                        status: guest.isConfirmed ? 'Confirmé' : 'En attente'
-                    });
-                    
-                    addLog(`✅ ${guest.name || 'Invité'}: ${code}`, 'success');
-                    successCount++;
-                } catch (err) {
-                    addLog(`❌ Erreur pour ${guest.name || 'Invité'}: ${err.message}`, 'error');
-                    errorCount++;
+        window.generateBtn.onclick=async()=>{
+            let btn=document.getElementById('generateBtn');
+            btn.innerHTML='<span class="loading"></span> Génération...';
+            btn.disabled=true;
+            let snap=await getDocs(collection(db,"invites"));
+            let count=0;
+            for(let docSnap of snap.docs){
+                let data=docSnap.data();
+                if(!data.uniqueCode){
+                    let prefix=data.name?data.name.substring(0,3).toUpperCase().replace(/[^A-Z]/g,'X'):'INV';
+                    let code=`${prefix}-${Math.random().toString(36).substring(2,8).toUpperCase()}`;
+                    await updateDoc(doc(db,"invites",docSnap.id),{uniqueCode:code});
+                    addLog(`✅ ${data.name||'Invité'}: ${code}`,'success');
+                    count++;
                 }
             }
-            
-            addLog(`🎉 Terminé ! ${successCount} codes générés, ${errorCount} erreurs.`, 'success');
-            
-            btn.innerHTML = '<i class="fas fa-magic"></i> Générer tous les codes manquants';
-            btn.disabled = false;
-            
-            await loadStats();
+            addLog(`🎉 Terminé ! ${count} codes générés`,'success');
+            btn.innerHTML='<i class="fas fa-magic"></i> Générer tous les codes manquants';
+            btn.disabled=false;
+            loadStats();
         };
-
-        window.exportCodes = () => {
-            if (generatedCodesList.length === 0) {
-                addLog("⚠️ Aucun code n'a été généré dans cette session. Générez d'abord les codes.", 'error');
-                return;
-            }
-            
-            const headers = ['Nom', 'Téléphone', 'Code unique', 'Statut'];
-            const rows = generatedCodesList.map(c => [c.name, c.phone, c.code, c.status]);
-            
-            const csvContent = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
-            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.href = url;
-            link.setAttribute('download', `codes_invites_${new Date().toISOString().slice(0,19)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-            addLog(`📎 Export CSV effectué: ${generatedCodesList.length} codes`, 'success');
-        };
-
-        // Chargement initial
         loadStats();
     </script>
 </body>
