@@ -312,6 +312,134 @@
             transition: all 0.3s;
         }
 
+        .btn-assign {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        /* Modal pour génération de codes */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .generate-modal {
+            background: white;
+            border-radius: 30px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            color: var(--gold-primary);
+        }
+
+        .modal-header .close-modal {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #999;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .category-group {
+            margin-bottom: 20px;
+        }
+
+        .category-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .category-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .cat-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--gold-light);
+            border-radius: 50px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .cat-btn.selected {
+            background: var(--gold-primary);
+            border-color: var(--gold-primary);
+            color: white;
+        }
+
+        .results-preview {
+            background: #f5f5f5;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .code-preview {
+            font-family: monospace;
+            background: white;
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-preview .copy-code {
+            cursor: pointer;
+            color: var(--gold-primary);
+        }
+
         /* Filters */
         .filters {
             background: white;
@@ -440,6 +568,7 @@
         .action-btns {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .btn-table-scan {
@@ -460,6 +589,17 @@
 
         .btn-table-view {
             background: var(--info);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .btn-table-edit {
+            background: var(--warning);
             color: white;
             border: none;
             padding: 6px 12px;
@@ -625,6 +765,11 @@
                 <h3>Personnes totales</h3>
                 <div class="stat-value" id="stat-persons">0</div>
             </div>
+            <div class="stat-card">
+                <i class="fas fa-key"></i>
+                <h3>Sans code</h3>
+                <div class="stat-value" id="stat-no-code">0</div>
+            </div>
         </div>
 
         <!-- Graphiques -->
@@ -644,8 +789,11 @@
             <button class="btn-scan" onclick="openScanner()">
                 <i class="fas fa-qrcode"></i> Scanner un QR Code à l'entrée
             </button>
-            <button class="btn-generate" onclick="generateMissingCodes()">
-                <i class="fas fa-key"></i> Générer les codes manquants
+            <button class="btn-generate" onclick="openGenerateModal()">
+                <i class="fas fa-magic"></i> Générer codes par catégorie
+            </button>
+            <button class="btn-assign" onclick="openAssignModal()">
+                <i class="fas fa-tag"></i> Attribuer code à un invité
             </button>
         </div>
 
@@ -658,6 +806,7 @@
                     <option value="confirmed">Confirmés</option>
                     <option value="pending">En attente</option>
                     <option value="scanned">Scannés (entrés)</option>
+                    <option value="no-code">Sans code</option>
                 </select>
             </div>
             <div class="filter-group">
@@ -686,7 +835,7 @@
                 <span id="result-count"></span>
             </div>
             <div class="table-container">
-                <table>
+                <table id="guest-table">
                     <thead>
                         <tr>
                             <th>Nom</th>
@@ -701,6 +850,88 @@
                     </thead>
                     <tbody id="guest-list"></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Génération de codes par catégorie -->
+    <div id="generate-modal" class="modal-overlay">
+        <div class="generate-modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-magic"></i> Générer des codes par catégorie</h3>
+                <span class="close-modal" onclick="closeGenerateModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="category-group">
+                    <label>📋 Sélectionnez la catégorie d'invités</label>
+                    <div class="category-buttons" id="category-buttons">
+                        <button class="cat-btn" data-category="all">👥 Tous les invités</button>
+                        <button class="cat-btn" data-category="pending">⏳ En attente de confirmation</button>
+                        <button class="cat-btn" data-category="confirmed">✅ Confirmés</button>
+                        <button class="cat-btn" data-category="no-code">🔑 Sans code uniquement</button>
+                        <button class="cat-btn" data-category="famille">👨‍👩‍👧‍👦 Famille</button>
+                        <button class="cat-btn" data-category="ami">🤝 Amis</button>
+                        <button class="cat-btn" data-category="collegue">💼 Collègues</button>
+                        <button class="cat-btn" data-category="vip">👑 VIP</button>
+                    </div>
+                </div>
+                
+                <div class="category-group">
+                    <label>🔢 Format du code</label>
+                    <select id="code-format">
+                        <option value="standard">Standard (PRÉFIX-RANDOM)</option>
+                        <option value="family">Famille (FAM-XXX)</option>
+                        <option value="vip">VIP (VIP-XXX)</option>
+                        <option value="numbered">Numéroté (INV-0001)</option>
+                    </select>
+                </div>
+
+                <div class="results-preview" id="preview-area">
+                    <p style="color: #999; text-align: center;">Sélectionnez une catégorie pour voir l'aperçu</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-generate" onclick="generateCodesByCategory()" style="background: linear-gradient(135deg, #2ECC71, #27AE60);">
+                    <i class="fas fa-check"></i> Générer les codes
+                </button>
+                <button class="btn-refresh" onclick="closeGenerateModal()" style="background: #ccc;">
+                    Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Attribution de code individuel -->
+    <div id="assign-modal" class="modal-overlay">
+        <div class="generate-modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-tag"></i> Attribuer un code à un invité</h3>
+                <span class="close-modal" onclick="closeAssignModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="category-group">
+                    <label>👤 Sélectionnez l'invité</label>
+                    <select id="guest-select" style="width: 100%; padding: 12px; border-radius: 10px;">
+                        <option value="">-- Chargement des invités --</option>
+                    </select>
+                </div>
+                
+                <div class="category-group">
+                    <label>🔑 Code personnalisé (optionnel)</label>
+                    <input type="text" id="custom-code" placeholder="Laisser vide pour génération auto" style="width: 100%; padding: 12px; border-radius: 10px;">
+                </div>
+
+                <div class="results-preview" id="assign-preview">
+                    <p style="color: #999; text-align: center;">Sélectionnez un invité</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-generate" onclick="assignCodeToGuest()" style="background: linear-gradient(135deg, #3498DB, #2980b9);">
+                    <i class="fas fa-key"></i> Attribuer le code
+                </button>
+                <button class="btn-refresh" onclick="closeAssignModal()" style="background: #ccc;">
+                    Annuler
+                </button>
             </div>
         </div>
     </div>
@@ -739,6 +970,7 @@
         const db = getFirestore(app);
 
         let allGuests = [];
+        let selectedCategory = 'all';
         let statusChart = null;
         let tableChart = null;
         let scanning = false;
@@ -778,6 +1010,7 @@
                 let scanned = 0;
                 let pending = 0;
                 let persons = 0;
+                let noCode = 0;
 
                 snapshot.forEach(doc => {
                     const data = doc.data();
@@ -788,6 +1021,7 @@
                     if (data.isConfirmed) confirmed++;
                     if (data.isScanned) scanned++;
                     if (!data.isConfirmed) pending++;
+                    if (!data.uniqueCode) noCode++;
                     
                     let personCount = 1;
                     if (data.type === "Couple") personCount = 2;
@@ -800,10 +1034,31 @@
                 document.getElementById('stat-scanned').innerText = scanned;
                 document.getElementById('stat-pending').innerText = pending;
                 document.getElementById('stat-persons').innerText = persons;
+                document.getElementById('stat-no-code').innerText = noCode;
+
+                // Mettre à jour le select pour l'attribution
+                updateGuestSelect();
 
                 renderTable();
                 updateCharts();
             });
+        }
+
+        function updateGuestSelect() {
+            const select = document.getElementById('guest-select');
+            if (select) {
+                const guestsWithoutCode = allGuests.filter(g => !g.uniqueCode);
+                select.innerHTML = '<option value="">-- Sélectionnez un invité --</option>';
+                guestsWithoutCode.forEach(guest => {
+                    const option = document.createElement('option');
+                    option.value = guest.id;
+                    option.textContent = `${guest.name || 'Invité'} - ${guest.relation || 'N/A'} ${guest.phone ? '(' + guest.phone + ')' : ''}`;
+                    select.appendChild(option);
+                });
+                if (guestsWithoutCode.length === 0) {
+                    select.innerHTML = '<option value="">✅ Tous les invités ont déjà un code</option>';
+                }
+            }
         }
 
         window.refreshData = () => {
@@ -832,8 +1087,8 @@
             });
 
             const tableCounts = {};
-            allGuests.filter(g => g.isConfirmed).forEach(g => {
-                const table = g.table || 'Non assigné';
+            allGuests.filter(g => g.isConfirmed && g.table).forEach(g => {
+                const table = g.table;
                 tableCounts[table] = (tableCounts[table] || 0) + 1;
             });
 
@@ -854,26 +1109,206 @@
             });
         }
 
-        // ========== GÉNÉRATION DES CODES MANQUANTS ==========
-        window.generateMissingCodes = async () => {
-            if (!confirm("Générer les codes uniques pour tous les invités qui n'en ont pas ?")) return;
+        // ========== MODAL GÉNÉRATION ==========
+        window.openGenerateModal = () => {
+            document.getElementById('generate-modal').classList.add('active');
+            updatePreview();
+        };
+
+        window.closeGenerateModal = () => {
+            document.getElementById('generate-modal').classList.remove('active');
+        };
+
+        // Sélection des catégories
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedCategory = btn.dataset.category;
+                updatePreview();
+            });
+        });
+
+        function getGuestsByCategory(category) {
+            switch(category) {
+                case 'pending':
+                    return allGuests.filter(g => !g.isConfirmed);
+                case 'confirmed':
+                    return allGuests.filter(g => g.isConfirmed);
+                case 'no-code':
+                    return allGuests.filter(g => !g.uniqueCode);
+                case 'famille':
+                    return allGuests.filter(g => g.relation && g.relation.includes('Famille'));
+                case 'ami':
+                    return allGuests.filter(g => g.relation && (g.relation.includes('Ami') || g.relation === 'Ami(e)' || g.relation === 'Ami proche'));
+                case 'collegue':
+                    return allGuests.filter(g => g.relation === 'Collègue');
+                case 'vip':
+                    return allGuests.filter(g => g.relation === 'VIP');
+                default:
+                    return allGuests;
+            }
+        }
+
+        function generateCode(guest, format, index = 0) {
+            const prefix = guest.name ? guest.name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X') : 'INV';
+            const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
             
-            showNotification("Génération des codes en cours...", "info");
+            switch(format) {
+                case 'family':
+                    return `FAM-${randomPart}`;
+                case 'vip':
+                    return `VIP-${randomPart}`;
+                case 'numbered':
+                    const num = String(index + 1).padStart(4, '0');
+                    return `INV-${num}`;
+                default:
+                    return `${prefix}-${randomPart}`;
+            }
+        }
+
+        function updatePreview() {
+            const guests = getGuestsByCategory(selectedCategory);
+            const format = document.getElementById('code-format').value;
+            const previewArea = document.getElementById('preview-area');
+            
+            if (guests.length === 0) {
+                previewArea.innerHTML = '<p style="color: #999; text-align: center;">⚠️ Aucun invité dans cette catégorie</p>';
+                return;
+            }
+            
+            const codes = guests.slice(0, 5).map((guest, i) => ({
+                name: guest.name || 'Invité',
+                code: generateCode(guest, format, i)
+            }));
+            
+            previewArea.innerHTML = `
+                <p style="margin-bottom: 10px;"><strong>📋 ${guests.length} invité(s) concerné(s)</strong></p>
+                ${codes.map(c => `
+                    <div class="code-preview">
+                        <span>${c.name}</span>
+                        <code>${c.code}</code>
+                        <i class="fas fa-copy copy-code" onclick="copyToClipboard('${c.code}')"></i>
+                    </div>
+                `).join('')}
+                ${guests.length > 5 ? `<p style="color: #999; font-size: 0.8rem; margin-top: 10px;">... et ${guests.length - 5} autres</p>` : ''}
+            `;
+        }
+
+        document.getElementById('code-format').addEventListener('change', updatePreview);
+
+        window.copyToClipboard = (text) => {
+            navigator.clipboard.writeText(text);
+            showNotification("Code copié !", "success");
+        };
+
+        window.generateCodesByCategory = async () => {
+            const guests = getGuestsByCategory(selectedCategory);
+            const format = document.getElementById('code-format').value;
+            
+            if (guests.length === 0) {
+                showNotification("Aucun invité dans cette catégorie", "error");
+                return;
+            }
+            
+            const guestsWithoutCode = guests.filter(g => !g.uniqueCode);
+            
+            if (guestsWithoutCode.length === 0) {
+                showNotification("Tous ces invités ont déjà un code", "info");
+                closeGenerateModal();
+                return;
+            }
+            
+            showNotification(`Génération de ${guestsWithoutCode.length} codes...`, "info");
             let count = 0;
             
-            for (const guest of allGuests) {
-                if (!guest.uniqueCode) {
-                    const namePrefix = guest.name ? guest.name.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X') : 'INV';
-                    const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
-                    const code = `${namePrefix}-${randomPart}`;
-                    
+            for (let i = 0; i < guestsWithoutCode.length; i++) {
+                const guest = guestsWithoutCode[i];
+                const code = generateCode(guest, format, i);
+                
+                try {
                     await updateDoc(doc(db, "invites", guest.id), { uniqueCode: code });
                     count++;
+                } catch (err) {
+                    console.error(`Erreur pour ${guest.name}:`, err);
                 }
             }
             
             showNotification(`${count} codes générés avec succès !`, "success");
+            closeGenerateModal();
             refreshData();
+        };
+
+        // ========== MODAL ATTRIBUTION ==========
+        window.openAssignModal = () => {
+            updateGuestSelect();
+            document.getElementById('assign-modal').classList.add('active');
+        };
+
+        window.closeAssignModal = () => {
+            document.getElementById('assign-modal').classList.remove('active');
+        };
+
+        document.getElementById('guest-select').addEventListener('change', (e) => {
+            const guestId = e.target.value;
+            const guest = allGuests.find(g => g.id === guestId);
+            const previewArea = document.getElementById('assign-preview');
+            
+            if (guest) {
+                const autoCode = generateCode(guest, 'standard', 0);
+                previewArea.innerHTML = `
+                    <p><strong>👤 ${guest.name || 'Invité'}</strong></p>
+                    <p>📞 ${guest.phone || 'Pas de téléphone'}</p>
+                    <p>🤝 ${guest.relation || 'N/A'}</p>
+                    <p>🔑 Code suggéré: <code>${autoCode}</code></p>
+                `;
+                document.getElementById('custom-code').value = autoCode;
+            } else {
+                previewArea.innerHTML = '<p style="color: #999; text-align: center;">Sélectionnez un invité</p>';
+                document.getElementById('custom-code').value = '';
+            }
+        });
+
+        window.assignCodeToGuest = async () => {
+            const guestId = document.getElementById('guest-select').value;
+            const customCode = document.getElementById('custom-code').value;
+            
+            if (!guestId) {
+                showNotification("Veuillez sélectionner un invité", "error");
+                return;
+            }
+            
+            const guest = allGuests.find(g => g.id === guestId);
+            if (!guest) {
+                showNotification("Invité non trouvé", "error");
+                return;
+            }
+            
+            if (guest.uniqueCode) {
+                showNotification(`${guest.name} a déjà un code: ${guest.uniqueCode}`, "warning");
+                return;
+            }
+            
+            let code = customCode.trim().toUpperCase();
+            if (!code) {
+                code = generateCode(guest, 'standard', 0);
+            }
+            
+            // Vérifier si le code existe déjà
+            const existing = allGuests.find(g => g.uniqueCode === code);
+            if (existing) {
+                showNotification(`Le code ${code} est déjà utilisé par ${existing.name}`, "error");
+                return;
+            }
+            
+            try {
+                await updateDoc(doc(db, "invites", guestId), { uniqueCode: code });
+                showNotification(`✅ Code ${code} attribué à ${guest.name}`, "success");
+                closeAssignModal();
+                refreshData();
+            } catch (err) {
+                showNotification("Erreur lors de l'attribution", "error");
+            }
         };
 
         // ========== RENDU DU TABLEAU ==========
@@ -887,6 +1322,7 @@
                     if (filterStatus === 'confirmed' && !guest.isConfirmed) return false;
                     if (filterStatus === 'scanned' && !guest.isScanned) return false;
                     if (filterStatus === 'pending' && guest.isConfirmed) return false;
+                    if (filterStatus === 'no-code' && guest.uniqueCode) return false;
                 }
                 if (filterTable !== 'all' && guest.table !== filterTable) return false;
                 if (searchTerm && !guest.name?.toLowerCase().includes(searchTerm) && 
@@ -910,7 +1346,7 @@
                     <td>${guest.relation || 'N/A'}</td>
                     <td><span class="table-badge">${guest.table || 'N/A'}</span></td>
                     <td>${guest.drinks || 'N/A'}</td>
-                    <td><code style="font-size: 0.7rem;">${guest.uniqueCode || '—'}</code></td>
+                    <td><code style="font-size: 0.7rem;">${guest.uniqueCode || '<span style="color: #e74c3c;">❌ Manquant</span>'}</code></td>
                     <td><span class="${statusClass}">${statusText}</span></td>
                     <td class="action-btns">
                         <button class="btn-table-scan" onclick="manualScan('${guest.id}')" ${guest.isScanned ? 'disabled' : ''}>
@@ -919,12 +1355,38 @@
                         <button class="btn-table-view" onclick="viewGuest('${guest.id}')">
                             <i class="fas fa-eye"></i>
                         </button>
+                        ${!guest.uniqueCode ? `<button class="btn-table-edit" onclick="quickAssignCode('${guest.id}')">
+                            <i class="fas fa-key"></i> Ajouter code
+                        </button>` : ''}
                     </td>
                 `;
             });
         }
 
         window.renderTable = renderTable;
+
+        // Attribution rapide d'un code
+        window.quickAssignCode = async (guestId) => {
+            const guest = allGuests.find(g => g.id === guestId);
+            if (!guest) return;
+            
+            const code = prompt(`Entrez un code pour ${guest.name} (ou laissez vide pour auto-génération):`);
+            
+            let finalCode = code ? code.trim().toUpperCase() : generateCode(guest, 'standard', 0);
+            
+            if (allGuests.find(g => g.uniqueCode === finalCode && g.id !== guestId)) {
+                showNotification("Ce code existe déjà", "error");
+                return;
+            }
+            
+            try {
+                await updateDoc(doc(db, "invites", guestId), { uniqueCode: finalCode });
+                showNotification(`Code ${finalCode} attribué à ${guest.name}`, "success");
+                refreshData();
+            } catch (err) {
+                showNotification("Erreur", "error");
+            }
+        };
 
         // ========== SCAN MANUEL ==========
         window.manualScan = async (guestId) => {
