@@ -517,13 +517,119 @@
             color: white;
         }
 
-        /* Responsive */
+        /* ========== BOUTON ADMIN AJOUTÉ ========== */
+        .admin-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 9999;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            font-size: 1.2rem;
+            opacity: 0.5;
+        }
+
+        .admin-link:hover {
+            opacity: 1;
+            background: var(--gold-primary);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.5);
+        }
+
+        /* Modal de confirmation admin */
+        .admin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .admin-modal.active {
+            display: flex;
+        }
+
+        .admin-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: fadeInUp 0.4s ease;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .admin-modal-content h3 {
+            color: var(--gold-primary);
+            margin-bottom: 10px;
+        }
+
+        .admin-modal-content p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .admin-modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .admin-modal-buttons button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-confirm {
+            background: var(--gold-primary);
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background: var(--gold-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background: #ccc;
+        }
+
+        /* Responsive pour bouton admin */
         @media (max-width: 768px) {
-            section { padding: 50px 5%; }
-            .card { padding: 25px; margin-top: -60px; }
-            h2:before, h2:after { display: none; }
-            .timeline-item { min-width: 140px; }
-            .drinks-grid { grid-template-columns: repeat(2, 1fr); }
+            .admin-link {
+                bottom: 15px;
+                left: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -725,6 +831,28 @@
         <i class="fas fa-heart" style="color: var(--gold-primary);"></i><br>
         DESIGNED WITH LOVE BY GABBY U & VAINQUEUR<br>
         © 2026 Rosin & Concilia - Tous droits réservés
+    </div>
+
+    <!-- ========== BOUTON ADMIN AJOUTÉ ========== -->
+    <a href="javascript:void(0)" class="admin-link" id="adminLinkBtn" title="Espace Admin">
+        <i class="fas fa-crown"></i>
+    </a>
+
+    <!-- Modal de confirmation admin -->
+    <div id="adminModal" class="admin-modal">
+        <div class="admin-modal-content">
+            <i class="fas fa-shield-alt" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
+            <h3>Accès Administrateur</h3>
+            <p>Vous allez être redirigé vers l'espace réservé aux organisateurs du mariage.</p>
+            <div class="admin-modal-buttons">
+                <button class="btn-confirm" onclick="redirectToAdmin()">
+                    <i class="fas fa-sign-in-alt"></i> Continuer
+                </button>
+                <button class="btn-cancel" onclick="closeAdminModal()">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+            </div>
+        </div>
     </div>
 
     <script type="module">
@@ -952,6 +1080,51 @@
             submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirmer ma présence';
             submitBtn.disabled = false;
         });
+
+        // ========== BOUTON ADMIN - FONCTIONS ==========
+        const adminLinkBtn = document.getElementById('adminLinkBtn');
+        const adminModal = document.getElementById('adminModal');
+
+        function openAdminModal() {
+            adminModal.classList.add('active');
+        }
+
+        function closeAdminModal() {
+            adminModal.classList.remove('active');
+        }
+
+        function redirectToAdmin() {
+            window.location.href = 'admin.html';
+        }
+
+        // Écouteur d'événement pour le bouton admin
+        if (adminLinkBtn) {
+            adminLinkBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openAdminModal();
+            });
+        }
+
+        // Fermer le modal en cliquant à l'extérieur
+        if (adminModal) {
+            adminModal.addEventListener('click', (e) => {
+                if (e.target === adminModal) {
+                    closeAdminModal();
+                }
+            });
+        }
+
+        // Fermer avec la touche Echap
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && adminModal && adminModal.classList.contains('active')) {
+                closeAdminModal();
+            }
+        });
+
+        // Exposer les fonctions globalement pour les appels HTML
+        window.openAdminModal = openAdminModal;
+        window.closeAdminModal = closeAdminModal;
+        window.redirectToAdmin = redirectToAdmin;
     </script>
 </body>
 </html>
