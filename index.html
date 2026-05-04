@@ -2,864 +2,156 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <meta name="description" content="Invitation au mariage de Rosin & Concilia - 20 Juin 2026 à Lubumbashi">
-    <title>Rosin & Concilia | Notre Mariage</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Rosin & Concilia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Librairies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --gold-primary: #C5A059;
-            --gold-light: #E8D5A3;
+            --gold: #C5A059;
             --gold-dark: #9B7B3A;
-            --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            --gold-grad: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728);
             --dark: #1A1A2E;
-            --dark-light: #16213E;
-            --white: #FFFFFF;
-            --cream: #FFF9F0;
-            --shadow: 0 20px 40px rgba(0,0,0,0.1);
-            --shadow-hover: 0 25px 50px rgba(0,0,0,0.15);
             --success: #2ECC71;
-            --error: #E74C3C;
+            --danger: #E74C3C;
             --warning: #F39C12;
+            --info: #3498DB;
         }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: var(--cream);
-            color: var(--dark);
-            overflow-x: hidden;
-        }
-
-        /* Scrollbar personnalisée */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--cream);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--gold-primary);
-            border-radius: 4px;
-        }
-
-        /* Hero Section */
-        .hero {
-            position: relative;
-            height: 100vh;
-            min-height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            color: white;
-            text-align: center;
-        }
-
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-        }
-
-        .hero-bg .slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
-        }
-
-        .hero-bg .slide.active {
-            opacity: 1;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(2px);
-            z-index: -1;
-        }
-
-        .hero-content {
-            z-index: 10;
-            padding: 40px;
-            border-radius: 30px;
-            backdrop-filter: blur(10px);
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.2);
-            animation: fadeInUp 1.2s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .shimmer {
-            font-family: 'Playfair Display', serif;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 3s infinite;
-            background-size: 200%;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -100% center; }
-            100% { background-position: 200% center; }
-        }
-
-        .hero-content h1 {
-            font-size: clamp(2rem, 8vw, 4.5rem);
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-        }
-
-        .hero-content .couple-name {
-            font-size: clamp(1.2rem, 5vw, 2rem);
-            letter-spacing: 6px;
-            font-weight: 300;
-        }
-
-        .hero-content .date-glow {
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
-            margin-top: 25px;
-            color: var(--gold-light);
-        }
-
-        /* Sections */
-        section {
-            padding: 80px 8%;
-        }
-
-        .card {
-            background: white;
-            padding: 50px;
-            border-radius: 30px;
-            box-shadow: var(--shadow);
-            margin-top: -80px;
-            position: relative;
-            z-index: 20;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.8rem, 5vw, 2.8rem);
-            margin-bottom: 30px;
-            color: var(--gold-primary);
-            position: relative;
-            display: inline-block;
-        }
-
-        h2:after {
-            content: '✦';
-            position: absolute;
-            right: -40px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.5rem;
-            color: var(--gold-primary);
-        }
-
-        h2:before {
-            content: '✦';
-            position: absolute;
-            left: -40px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.5rem;
-            color: var(--gold-primary);
-        }
-
-        .info-box {
-            margin: 30px 0;
-            line-height: 1.8;
-            font-size: 1.1rem;
-        }
-
-        hr {
-            width: 80px;
-            margin: 40px auto;
-            border: 1px solid var(--gold-primary);
-        }
-
-        /* Formulaire */
-        .form-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        input, select {
-            width: 100%;
-            padding: 14px 18px;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #fafafa;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--gold-primary);
-            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
-            background: white;
-        }
-
-        input:read-only {
-            background: #f0f0f0;
-            cursor: not-allowed;
-        }
-
-        /* Boissons */
-        .drinks-section {
-            background: linear-gradient(135deg, #f8f4e8, #fff8f0);
-            padding: 25px;
-            border-radius: 20px;
-            margin: 20px 0;
-        }
-
-        .drinks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .drink-option {
-            background: white;
-            padding: 12px;
-            border-radius: 50px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: 500;
-        }
-
-        .drink-option i {
-            font-size: 1.2rem;
-            color: var(--gold-primary);
-        }
-
-        .drink-option.selected {
-            background: var(--gold-gradient);
-            border-color: var(--gold-dark);
-            color: var(--dark);
-        }
-
-        .drink-option.selected i {
-            color: var(--dark);
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        .checkbox-label input {
-            width: auto;
-        }
-
-        .btn-gold {
-            background: var(--gold-gradient);
-            border: none;
-            padding: 16px 35px;
-            color: var(--dark);
-            font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 1rem;
-            margin-top: 20px;
-        }
-
-        .btn-gold:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(191, 149, 63, 0.4);
-        }
-
-        .btn-gold:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Ticket */
-        #ticket-display {
-            display: none;
-            margin-top: 40px;
-            background: linear-gradient(135deg, #fff 0%, #fef9e6 100%);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px dashed var(--gold-primary);
-            position: relative;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        #capture-area {
-            text-align: center;
-        }
-
-        #capture-area h3 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-
-        #qrcode {
-            display: flex;
-            justify-content: center;
-            margin: 25px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            display: inline-flex;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .ticket-info {
-            background: rgba(197, 160, 89, 0.1);
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
-        }
-
-        .download-btn {
-            background: none;
-            border: 2px solid var(--gold-primary);
-            padding: 12px 25px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-
-        .download-btn:hover {
-            background: var(--gold-primary);
-            color: white;
-        }
-
-        /* Timeline */
-        .timeline {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .timeline-item {
-            text-align: center;
-            flex: 1;
-            min-width: 180px;
-        }
-
-        .timeline-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--gold-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 1.8rem;
-            color: var(--dark);
-        }
-
-        /* Map */
-        .map-container {
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            margin-top: 30px;
-        }
-
-        .map-container iframe {
-            width: 100%;
-            height: 400px;
-            border: 0;
-        }
-
-        /* Welcome message */
-        .welcome-message {
-            background: linear-gradient(135deg, var(--gold-light), #fff);
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .welcome-message p {
-            font-style: italic;
-            font-size: 1.1rem;
-            color: var(--dark);
-        }
-
-        /* Notification */
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 12px;
-            color: white;
-            font-weight: 500;
+        body { font-family: 'Montserrat', sans-serif; background: #F0F2F5; }
+        .login-screen {
+            position: fixed; inset: 0;
+            background: linear-gradient(135deg, #1A1A2E, #16213E);
+            display: flex; align-items: center; justify-content: center;
             z-index: 1000;
-            animation: slideInRight 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+        .login-card {
+            background: white; padding: 40px; border-radius: 30px;
+            width: 400px; text-align: center;
         }
-
+        .login-card input { width: 100%; padding: 14px; margin: 10px 0; border-radius: 12px; border: 1px solid #ddd; }
+        .login-card button { background: var(--gold-grad); border: none; padding: 14px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; }
+        .admin-container { display: none; max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .admin-header {
+            background: white; padding: 20px 30px; border-radius: 20px;
+            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px;
+            margin-bottom: 30px;
+        }
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+            gap: 20px; margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white; padding: 25px; border-radius: 20px;
+            text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .stat-card .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--gold); }
+        .action-buttons { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .btn { padding: 12px 25px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; }
+        .btn-gold { background: var(--gold-grad); color: white; }
+        .btn-purple { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-red { background: var(--danger); color: white; }
+        .filters {
+            background: white; padding: 20px; border-radius: 20px;
+            display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;
+        }
+        .filter-group { flex: 1; min-width: 150px; }
+        .filter-group select, .filter-group input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd; }
+        .guest-table-container {
+            background: white; border-radius: 20px; overflow: auto;
+        }
+        .table-header { padding: 20px; background: var(--dark); color: white; display: flex; justify-content: space-between; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; }
+        .status-confirmed { background: var(--success); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; }
+        .status-pending { background: var(--warning); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; }
+        .status-scanned { background: var(--info); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; }
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            align-items: center; justify-content: center; z-index: 2000;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: white; border-radius: 30px; width: 500px; max-width: 90%;
+            max-height: 80vh; overflow-y: auto;
+        }
+        .modal-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .modal-body { padding: 25px; }
+        .modal-footer { padding: 20px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 15px; }
+        .cat-btn {
+            padding: 8px 16px; border: 2px solid var(--gold); border-radius: 50px;
+            background: white; cursor: pointer; margin: 5px;
+        }
+        .cat-btn.selected { background: var(--gold); color: white; }
+        .notification {
+            position: fixed; bottom: 20px; right: 20px; padding: 15px 25px;
+            border-radius: 12px; color: white; z-index: 3000;
+        }
         .notification.success { background: var(--success); }
-        .notification.error { background: var(--error); }
-        .notification.info { background: var(--warning); }
-
-        /* Loading */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #fff;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.6s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Footer */
-        .footer-dev {
-            text-align: center;
-            padding: 30px;
-            font-size: 0.7rem;
-            opacity: 0.6;
-            letter-spacing: 2px;
-            background: var(--dark);
-            color: white;
-        }
-
-        /* ========== BOUTON ADMIN AJOUTÉ ========== */
-        .admin-link {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 45px;
-            height: 45px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 9999;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: white;
-            font-size: 1.2rem;
-            opacity: 0.5;
-        }
-
-        .admin-link:hover {
-            opacity: 1;
-            background: var(--gold-primary);
-            transform: scale(1.1);
-            box-shadow: 0 0 15px rgba(197, 160, 89, 0.5);
-        }
-
-        /* Modal de confirmation admin */
-        .admin-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            z-index: 10000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .admin-modal.active {
-            display: flex;
-        }
-
-        .admin-modal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            animation: fadeInUp 0.4s ease;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
-
-        .admin-modal-content h3 {
-            color: var(--gold-primary);
-            margin-bottom: 10px;
-        }
-
-        .admin-modal-content p {
-            color: #666;
-            margin-bottom: 25px;
-        }
-
-        .admin-modal-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .admin-modal-buttons button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .btn-confirm {
-            background: var(--gold-primary);
-            color: white;
-        }
-
-        .btn-confirm:hover {
-            background: var(--gold-dark);
-            transform: translateY(-2px);
-        }
-
-        .btn-cancel {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .btn-cancel:hover {
-            background: #ccc;
-        }
-
-        /* Responsive pour bouton admin */
-        @media (max-width: 768px) {
-            .admin-link {
-                bottom: 15px;
-                left: 15px;
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
-        }
+        .notification.error { background: var(--danger); }
+        .loading { display: inline-block; width: 16px; height: 16px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.6s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 768px) { th, td { font-size: 0.75rem; padding: 10px; } }
     </style>
 </head>
 <body>
-
-    <!-- Hero Section -->
-    <div class="hero">
-        <div class="hero-bg">
-            <div class="slide active" style="background-image: url('conciliaetrosin1.jpg')"></div>
-            <div class="slide" style="background-image: url('conciliaetrosin2.jpg')"></div>
-            <div class="slide" style="background-image: url('conciliaetrosin3.jpg')"></div>
-        </div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="shimmer">Notre Mariage</h1>
-            <div class="couple-name">ROSIN <span style="font-family: serif;">&</span> CONCILIA</div>
-            <div class="date-glow">
-                <i class="fas fa-calendar-alt"></i> 20 JUIN 2026 
-                <span style="margin: 0 10px;">|</span> 
-                <i class="fas fa-map-marker-alt"></i> LUBUMBASHI
-            </div>
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <i class="fas fa-crown" style="font-size: 3rem; color: var(--gold);"></i>
+            <h2>Admin Mariage</h2>
+            <input type="email" id="adminEmail" placeholder="admin@rosin-concilia.com">
+            <input type="password" id="adminPass" placeholder="Mot de passe">
+            <button onclick="login()">Connexion</button>
         </div>
     </div>
 
-    <!-- RSVP Section -->
-    <section id="rsvp">
-        <div class="card">
-            <div class="welcome-message">
-                <i class="fas fa-heart" style="color: var(--gold-primary); font-size: 2rem; margin-bottom: 15px; display: inline-block;"></i>
-                <p>“L'amour est la seule chose qui grandit quand on la partage.”</p>
-                <p style="margin-top: 10px;">Nous sommes ravis de vous accueillir à notre union. Merci de confirmer votre présence ci-dessous.</p>
-            </div>
-
-            <h2>Confirmation de Présence</h2>
-            
-            <!-- Étape 1: Code d'accès -->
-            <div id="auth-check">
-                <p style="margin-bottom: 20px;">Veuillez entrer votre <strong>code d'accès personnel</strong> pour confirmer votre présence.</p>
-                <div class="form-group">
-                    <label><i class="fas fa-key"></i> Code d'accès</label>
-                    <input type="text" id="access-code" placeholder="Ex: ROS-ABC123" style="text-align: center; font-family: monospace; font-size: 1.1rem; letter-spacing: 1px;">
-                </div>
-                <button class="btn-gold" id="unlock-btn">
-                    <i class="fas fa-unlock-alt"></i> Accéder au formulaire
-                </button>
-            </div>
-
-            <!-- Étape 2: Formulaire -->
-            <form id="rsvpForm" style="display: none;">
-                <div class="form-group">
-                    <label><i class="fas fa-user"></i> Nom complet *</label>
-                    <input type="text" id="guestName" required placeholder="Ex: Jean Mukendi">
-                </div>
-                
-                <div class="form-group">
-                    <label><i class="fas fa-venus-mars"></i> Sexe *</label>
-                    <select id="gender">
-                        <option value="Homme">Homme</option>
-                        <option value="Femme">Femme</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-users"></i> Type de présence *</label>
-                    <select id="guestType">
-                        <option value="Solo">Solo</option>
-                        <option value="Couple">En couple</option>
-                        <option value="Famille">Avec famille</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-handshake"></i> Relation avec les mariés *</label>
-                    <select id="relation">
-                        <option value="Famille proche">Famille proche</option>
-                        <option value="Famille éloignée">Famille éloignée</option>
-                        <option value="Ami proche">Ami(e) proche</option>
-                        <option value="Ami(e)">Ami(e)</option>
-                        <option value="Collègue">Collègue</option>
-                        <option value="VIP">VIP / Invité d'honneur</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-phone"></i> Téléphone *</label>
-                    <input type="tel" id="phone" required placeholder="+243 XXX XXX XXX">
-                </div>
-
-                <div class="form-group">
-                    <label><i class="fas fa-envelope"></i> Email (optionnel)</label>
-                    <input type="email" id="email" placeholder="exemple@email.com">
-                </div>
-
-                <div class="drinks-section">
-                    <label><i class="fas fa-glass-cheers"></i> Vos préférences de boissons</label>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px;">Sélectionnez vos boissons préférées (plusieurs choix possibles)</p>
-                    <div class="drinks-grid" id="drinks-grid">
-                        <div class="drink-option" data-drink="Whisky"><i class="fas fa-whiskey-glass"></i> Whisky</div>
-                        <div class="drink-option" data-drink="Tembo"><i class="fas fa-beer"></i> Tembo</div>
-                        <div class="drink-option" data-drink="Coca"><i class="fas fa-cola"></i> Coca</div>
-                        <div class="drink-option" data-drink="Champagne"><i class="fas fa-champagne-glasses"></i> Champagne</div>
-                        <div class="drink-option" data-drink="Jus"><i class="fas fa-apple-alt"></i> Jus</div>
-                        <div class="drink-option" data-drink="Eau"><i class="fas fa-tint"></i> Eau</div>
-                    </div>
-                    <input type="hidden" id="selectedDrinks" value="">
-                </div>
-
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="needHotel"> <i class="fas fa-hotel"></i> J'ai besoin d'aide pour l'hébergement
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="needTransport"> <i class="fas fa-car"></i> J'ai besoin d'aide pour le transport
-                    </label>
-                </div>
-
-                <button type="submit" class="btn-gold" id="submit-btn">
-                    <i class="fas fa-check-circle"></i> Confirmer ma présence
-                </button>
-            </form>
-
-            <!-- Étape 3: Ticket -->
-            <div id="ticket-display">
-                <div id="capture-area">
-                    <h3 class="shimmer"><i class="fas fa-ticket-alt"></i> PASS ENTRÉE</h3>
-                    <div class="ticket-info">
-                        <p><strong>Invité(e):</strong> <span id="pass-name"></span></p>
-                        <p><strong>Table attribuée:</strong> <span id="pass-table"></span></p>
-                        <p><strong>Préférences:</strong> <span id="pass-drinks"></span></p>
-                    </div>
-                    <div id="qrcode"></div>
-                    <p style="font-size: 0.8rem; margin-top: 10px;">
-                        <i class="fas fa-calendar-check"></i> Samedi 20 Juin 2026 - 19h00<br>
-                        Salle Aurore, Lubumbashi
-                    </p>
-                    <p style="font-size: 0.7rem; color: #999; margin-top: 10px;">
-                        <i class="fas fa-shield-alt"></i> Ce billet est nominatif et ne peut être utilisé qu'une seule fois
-                    </p>
-                </div>
-                <button class="download-btn" id="download-pass-btn">
-                    <i class="fas fa-download"></i> Télécharger mon Pass
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Programme Section -->
-    <section style="background: white;">
-        <h2><i class="fas fa-calendar-week"></i> Programme de la Cérémonie</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-icon"><i class="fas fa-church"></i></div>
-                <h3>14:00</h3>
-                <p>Bénédiction Nuptiale<br>Paroisse Saint Laurent</p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-icon"><i class="fas fa-camera"></i></div>
-                <h3>16:00</h3>
-                <p>Séance Photo<br>Avec les proches</p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-icon"><i class="fas fa-music"></i></div>
-                <h3>19:00</h3>
-                <p>Soirée Dansante<br>Salle Aurore</p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-icon"><i class="fas fa-utensils"></i></div>
-                <h3>21:00</h3>
-                <p>Dîner & Gâteau<br>Service traiteur</p>
+    <div id="adminContent" class="admin-container">
+        <div class="admin-header">
+            <h1><i class="fas fa-crown"></i> Dashboard Rosin & Concilia</h1>
+            <div>
+                <button class="btn" onclick="refreshData()" style="background: var(--info); color:white;"><i class="fas fa-sync"></i> Actualiser</button>
+                <button class="btn" onclick="exportCSV()" style="background: var(--success); color:white;"><i class="fas fa-download"></i> Export CSV</button>
+                <button class="btn" onclick="logout()" style="background: var(--danger); color:white;">Déconnexion</button>
             </div>
         </div>
 
-        <hr>
-
-        <h2><i class="fas fa-map-marked-alt"></i> Lieux de la Célébration</h2>
-        <div class="info-box">
-            <p><strong><i class="fas fa-church"></i> Cérémonie religieuse:</strong><br>
-            Paroisse Saint Laurent, Route Kipopo, Lubumbashi</p>
-            <p><strong><i class="fas fa-music"></i> Réception:</strong><br>
-            Salle Aurore, Avenue du 30 Juin, Lubumbashi</p>
-            <p><strong><i class="fas fa-clock"></i> Heure d'arrivée recommandée:</strong><br>
-            Merci d'arriver 15 minutes avant le début de chaque cérémonie</p>
+        <div class="stats-grid">
+            <div class="stat-card"><i class="fas fa-users"></i><h3>Total</h3><div class="stat-value" id="stat-total">0</div></div>
+            <div class="stat-card"><i class="fas fa-check-circle"></i><h3>Confirmés</h3><div class="stat-value" id="stat-confirmed">0</div></div>
+            <div class="stat-card"><i class="fas fa-qrcode"></i><h3>Entrés</h3><div class="stat-value" id="stat-scanned">0</div></div>
+            <div class="stat-card"><i class="fas fa-clock"></i><h3>En attente</h3><div class="stat-value" id="stat-pending">0</div></div>
+            <div class="stat-card"><i class="fas fa-key"></i><h3>Sans code</h3><div class="stat-value" id="stat-no-code">0</div></div>
         </div>
 
-        <div class="map-container">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31344.426563251906!2d27.4794!3d-11.6667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1973c5a5d4c5b5c5%3A0x0!2zMTDCsDQwJzAwLjAiUyAyN8KwMjgnNDUuOCJF!5e0!3m2!1sfr!2scd!4v1700000000000" 
-                allowfullscreen="" 
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+        <div class="action-buttons">
+            <button class="btn btn-gold" onclick="openGenerateModal()"><i class="fas fa-magic"></i> Générer codes par catégorie</button>
+            <button class="btn btn-purple" onclick="openAssignModal()"><i class="fas fa-tag"></i> Attribuer code individuel</button>
         </div>
-    </section>
 
-    <div class="footer-dev">
-        <i class="fas fa-heart" style="color: var(--gold-primary);"></i><br>
-        DESIGNED WITH LOVE BY GABBY U & VAINQUEUR<br>
-        © 2026 Rosin & Concilia - Tous droits réservés
-    </div>
+        <div class="filters">
+            <div class="filter-group"><label>Statut</label><select id="filter-status" onchange="renderTable()"><option value="all">Tous</option><option value="confirmed">Confirmés</option><option value="pending">En attente</option><option value="scanned">Entrés</option><option value="no-code">Sans code</option></select></div>
+            <div class="filter-group"><label>Table</label><select id="filter-table" onchange="renderTable()"><option value="all">Toutes</option><option value="fantan">Fantan</option><option value="coca">Coca</option><option value="temba">Temba</option><option value="wisky">Wisky</option><option value="champagne">Champagne</option></select></div>
+            <div class="filter-group"><label>Recherche</label><input type="text" id="search-input" placeholder="Nom..." onkeyup="renderTable()"></div>
+        </div>
 
-    <!-- ========== BOUTON ADMIN AJOUTÉ ========== -->
-    <a href="javascript:void(0)" class="admin-link" id="adminLinkBtn" title="Espace Admin">
-        <i class="fas fa-crown"></i>
-    </a>
-
-    <!-- Modal de confirmation admin -->
-    <div id="adminModal" class="admin-modal">
-        <div class="admin-modal-content">
-            <i class="fas fa-shield-alt" style="font-size: 3rem; color: var(--gold-primary); margin-bottom: 15px;"></i>
-            <h3>Accès Administrateur</h3>
-            <p>Vous allez être redirigé vers l'espace réservé aux organisateurs du mariage.</p>
-            <div class="admin-modal-buttons">
-                <button class="btn-confirm" onclick="redirectToAdmin()">
-                    <i class="fas fa-sign-in-alt"></i> Continuer
-                </button>
-                <button class="btn-cancel" onclick="closeAdminModal()">
-                    <i class="fas fa-times"></i> Annuler
-                </button>
-            </div>
+        <div class="guest-table-container">
+            <div class="table-header"><span><i class="fas fa-list"></i> Invités</span><span id="result-count"></span></div>
+            <table><thead><tr><th>Nom</th><th>Téléphone</th><th>Relation</th><th>Table</th><th>Code</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="guest-list"></tbody></table>
         </div>
     </div>
+
+    <!-- Modals -->
+    <div id="generateModal" class="modal-overlay"><div class="modal-content"><div class="modal-header"><h3>Générer codes</h3><span onclick="closeGenerateModal()" style="cursor:pointer">&times;</span></div><div class="modal-body"><div id="cat-buttons"></div><select id="code-format" style="width:100%; padding:10px; margin-top:15px;"><option value="standard">Standard</option><option value="numbered">Numéroté INV-0001</option></select><div id="preview" style="margin-top:15px; background:#f5f5f5; padding:15px; border-radius:15px;"></div></div><div class="modal-footer"><button class="btn btn-gold" onclick="generateCodes()">Générer</button><button onclick="closeGenerateModal()">Annuler</button></div></div></div>
+
+    <div id="assignModal" class="modal-overlay"><div class="modal-content"><div class="modal-header"><h3>Attribuer code</h3><span onclick="closeAssignModal()" style="cursor:pointer">&times;</span></div><div class="modal-body"><select id="guest-select" style="width:100%; padding:12px;"></select><input type="text" id="custom-code" placeholder="Code personnalisé" style="width:100%; margin-top:15px; padding:12px; border-radius:10px;"><div id="assign-preview" style="margin-top:15px;"></div></div><div class="modal-footer"><button class="btn btn-purple" onclick="assignCode()">Attribuer</button><button onclick="closeAssignModal()">Annuler</button></div></div></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, where, getDocs, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Configuration Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyASCqKVU-tchKTnjkwemo_8DORutXiGQCc",
             authDomain: "invitation-electronic.firebaseapp.com",
@@ -868,263 +160,115 @@
             messagingSenderId: "896364908517",
             appId: "1:896364908517:web:61c45584bac322b8a0690c"
         };
-
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
+        let allGuests = [];
 
-        // ========== CARROUSEL ==========
-        let slideIndex = 0;
-        const slides = document.querySelectorAll('.slide');
-        if (slides.length > 0) {
-            setInterval(() => {
-                slides[slideIndex].classList.remove('active');
-                slideIndex = (slideIndex + 1) % slides.length;
-                slides[slideIndex].classList.add('active');
-            }, 5000);
+        window.login = () => signInWithEmailAndPassword(auth, document.getElementById('adminEmail').value, document.getElementById('adminPass').value).catch(()=>alert("Identifiants invalides"));
+        window.logout = () => signOut(auth);
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === "admin@rosin-concilia.com") {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                loadData();
+            } else if (user) signOut(auth);
+            else { document.getElementById('loginScreen').style.display = 'flex'; document.getElementById('adminContent').style.display = 'none'; }
+        });
+
+        function loadData() {
+            onSnapshot(collection(db, "invites"), (snap) => {
+                allGuests = [];
+                let total=0, confirmed=0, scanned=0, pending=0, noCode=0;
+                snap.forEach(d => { let data=d.data(); let g={id:d.id,...data}; allGuests.push(g); total++; if(data.isConfirmed) confirmed++; if(data.isScanned) scanned++; if(!data.isConfirmed) pending++; if(!data.uniqueCode) noCode++; });
+                document.getElementById('stat-total').innerText=total;
+                document.getElementById('stat-confirmed').innerText=confirmed;
+                document.getElementById('stat-scanned').innerText=scanned;
+                document.getElementById('stat-pending').innerText=pending;
+                document.getElementById('stat-no-code').innerText=noCode;
+                renderTable();
+                updateGuestSelect();
+            });
         }
+        window.refreshData = () => { loadData(); showNotification("Actualisé","success"); };
 
-        // ========== SÉLECTION DES BOISSONS ==========
-        let selectedDrinksArray = [];
-        const drinkOptions = document.querySelectorAll('.drink-option');
-        drinkOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                const drink = option.dataset.drink;
-                if (option.classList.contains('selected')) {
-                    option.classList.remove('selected');
-                    selectedDrinksArray = selectedDrinksArray.filter(d => d !== drink);
-                } else {
-                    option.classList.add('selected');
-                    selectedDrinksArray.push(drink);
+        function renderTable() {
+            let filtered = allGuests.filter(g => {
+                let status = document.getElementById('filter-status').value;
+                if(status==='confirmed' && !g.isConfirmed) return false;
+                if(status==='pending' && g.isConfirmed) return false;
+                if(status==='scanned' && !g.isScanned) return false;
+                if(status==='no-code' && g.uniqueCode) return false;
+                let table = document.getElementById('filter-table').value;
+                if(table!=='all' && g.table!==table) return false;
+                let search = document.getElementById('search-input').value.toLowerCase();
+                if(search && !g.name?.toLowerCase().includes(search)) return false;
+                return true;
+            });
+            document.getElementById('result-count').innerHTML = `${filtered.length} invité(s)`;
+            let tbody = document.getElementById('guest-list'); tbody.innerHTML="";
+            filtered.forEach(g => {
+                let statusClass = g.isScanned ? 'status-scanned' : (g.isConfirmed ? 'status-confirmed' : 'status-pending');
+                let statusText = g.isScanned ? 'Entré' : (g.isConfirmed ? 'Confirmé' : 'En attente');
+                tbody.innerHTML += `<tr><td><strong>${g.name||'N/A'}</strong></td><td>${g.phone||'N/A'}</td><td>${g.relation||'N/A'}</td><td>${g.table||'N/A'}</td><td><code>${g.uniqueCode||'❌'}</code></td><td><span class="${statusClass}">${statusText}</span></td><td><button class="btn" onclick="viewGuest('${g.id}')" style="background:var(--info);color:white;padding:5px 10px;">👁️</button></td></tr>`;
+            });
+        }
+        window.renderTable = renderTable;
+        window.viewGuest = (id) => { let g=allGuests.find(x=>x.id===id); alert(`Invité: ${g.name}\nTél: ${g.phone}\nTable: ${g.table}\nCode: ${g.uniqueCode||'Non généré'}\nStatut: ${g.isScanned?'Entré':(g.isConfirmed?'Confirmé':'En attente')}`); };
+
+        function updateGuestSelect() {
+            let sel = document.getElementById('guest-select');
+            sel.innerHTML = '<option value="">-- Sélectionner --</option>';
+            allGuests.filter(g=>!g.uniqueCode).forEach(g=>sel.innerHTML+=`<option value="${g.id}">${g.name||'Invité'} - ${g.relation||''}</option>`);
+        }
+        function generateCode(name,format,i){ let p=name?name.substring(0,3).toUpperCase():'INV'; let r=Math.random().toString(36).substring(2,8).toUpperCase(); return format==='numbered'?`INV-${String(i+1).padStart(4,'0')}`:`${p}-${r}`; }
+        window.openGenerateModal = () => {
+            let cats = [{id:'no-code',name:'🔑 Sans code'},{id:'pending',name:'⏳ En attente'},{id:'all',name:'👥 Tous'}];
+            document.getElementById('cat-buttons').innerHTML = cats.map(c=>`<button class="cat-btn" data-cat="${c.id}" onclick="selectCat('${c.id}')">${c.name}</button>`).join('');
+            document.getElementById('generateModal').classList.add('active');
+            window.selectedCat = 'no-code';
+        };
+        window.selectCat = (c) => { window.selectedCat=c; updatePreview(); };
+        function updatePreview(){
+            let guests = allGuests.filter(g=>{ if(window.selectedCat==='no-code') return !g.uniqueCode; if(window.selectedCat==='pending') return !g.isConfirmed; return true; });
+            let format = document.getElementById('code-format').value;
+            let preview = guests.slice(0,5).map((g,i)=>`<div>📌 ${g.name||'Invité'} → ${generateCode(g.name,format,i)}</div>`).join('');
+            document.getElementById('preview').innerHTML = `<strong>${guests.length} invité(s)</strong><br>${preview}${guests.length>5?'...':''}`;
+        }
+        document.getElementById('code-format').addEventListener('change',updatePreview);
+        window.generateCodes = async () => {
+            let guests = allGuests.filter(g=>{ if(window.selectedCat==='no-code') return !g.uniqueCode; if(window.selectedCat==='pending') return !g.isConfirmed; return true; });
+            let format = document.getElementById('code-format').value;
+            let count=0;
+            for(let i=0;i<guests.length;i++){
+                if(!guests[i].uniqueCode){
+                    await updateDoc(doc(db,"invites",guests[i].id),{uniqueCode:generateCode(guests[i].name,format,i)});
+                    count++;
                 }
-                document.getElementById('selectedDrinks').value = selectedDrinksArray.join(', ');
-            });
-        });
-
-        // ========== TABLES DISPONIBLES ==========
-        const tables = ['fantan', 'coca', 'temba', 'wisky', 'champagne', 'elanc', 'sansbo'];
-        
-        function assignTable() {
-            return tables[Math.floor(Math.random() * tables.length)];
-        }
-
-        // ========== NOTIFICATION ==========
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${message}`;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 4000);
-        }
-
-        // ========== AFFICHER LE TICKET ==========
-        function showPass(id, name, table, drinks) {
-            document.getElementById('ticket-display').style.display = 'block';
-            document.getElementById('pass-name').innerText = name;
-            document.getElementById('pass-table').innerText = table || "fantan";
-            document.getElementById('pass-drinks').innerText = drinks || "À définir";
-            
-            const qrcodeDiv = document.getElementById('qrcode');
-            qrcodeDiv.innerHTML = "";
-            
-            const qrData = JSON.stringify({
-                id: id,
-                name: name,
-                table: table,
-                drinks: drinks,
-                event: "Rosin & Concilia Mariage",
-                date: "2026-06-20"
-            });
-            
-            new QRCode(qrcodeDiv, { 
-                text: qrData, 
-                width: 180, 
-                height: 180,
-                colorDark: "#1A1A2E",
-                colorLight: "#FFFFFF"
-            });
-        }
-
-        // ========== TÉLÉCHARGER LE PASS ==========
-        document.getElementById('download-pass-btn').addEventListener('click', () => {
-            const element = document.querySelector("#capture-area");
-            html2canvas(element, {
-                scale: 2,
-                backgroundColor: '#ffffff',
-                logging: false
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `Pass-Mariage-${document.getElementById('pass-name').innerText}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                showNotification("Pass téléchargé avec succès !", "success");
-            }).catch(err => {
-                console.error("Erreur:", err);
-                showNotification("Impossible de télécharger l'image", "error");
-            });
-        });
-
-        // ========== DÉVERROUILLAGE AVEC CODE UNIQUE ==========
-        let currentInviteId = null;
-        let currentInviteData = null;
-
-        document.getElementById('unlock-btn').addEventListener('click', async () => {
-            const code = document.getElementById('access-code').value.trim().toUpperCase();
-            const btn = document.getElementById('unlock-btn');
-            
-            if (!code) {
-                showNotification("Veuillez entrer votre code d'accès", "error");
-                return;
             }
-
-            btn.innerHTML = '<span class="loading"></span> Vérification...';
-            btn.disabled = true;
-
-            try {
-                const q = query(collection(db, "invites"), where("uniqueCode", "==", code));
-                const snapshot = await getDocs(q);
-                
-                if (snapshot.empty) {
-                    showNotification("❌ Code d'accès invalide. Veuillez vérifier votre invitation.", "error");
-                    btn.innerHTML = '<i class="fas fa-unlock-alt"></i> Accéder au formulaire';
-                    btn.disabled = false;
-                    return;
-                }
-
-                const inviteDoc = snapshot.docs[0];
-                const inviteData = inviteDoc.data();
-
-                if (inviteData.isScanned === true) {
-                    showNotification("⚠️ Ce code a déjà été utilisé à l'entrée. Contactez les organisateurs.", "error");
-                    btn.innerHTML = '<i class="fas fa-unlock-alt"></i> Accéder au formulaire';
-                    btn.disabled = false;
-                    return;
-                }
-
-                if (inviteData.isConfirmed === true) {
-                    showNotification("✅ Vous avez déjà confirmé votre présence ! Voici votre pass.", "success");
-                    showPass(inviteDoc.id, inviteData.name, inviteData.table, inviteData.drinks);
-                    document.getElementById('auth-check').style.display = 'none';
-                    document.getElementById('rsvpForm').style.display = 'none';
-                    btn.innerHTML = '<i class="fas fa-unlock-alt"></i> Accéder au formulaire';
-                    btn.disabled = false;
-                    return;
-                }
-
-                currentInviteId = inviteDoc.id;
-                currentInviteData = inviteData;
-                
-                document.getElementById('guestName').value = inviteData.name || '';
-                document.getElementById('guestName').readOnly = true;
-                
-                document.getElementById('auth-check').style.display = 'none';
-                document.getElementById('rsvpForm').style.display = 'block';
-                
-                showNotification(`👋 Bienvenue ${inviteData.name || 'cher invité'} ! Veuillez compléter vos informations.`, "success");
-                
-            } catch (err) {
-                console.error(err);
-                showNotification("Erreur de connexion. Réessayez.", "error");
-            }
-            
-            btn.innerHTML = '<i class="fas fa-unlock-alt"></i> Accéder au formulaire';
-            btn.disabled = false;
-        });
-
-        // ========== SOUMISSION DU FORMULAIRE ==========
-        document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submit-btn');
-            submitBtn.innerHTML = '<span class="loading"></span> Envoi en cours...';
-            submitBtn.disabled = true;
-            
-            const name = document.getElementById('guestName').value;
-            const gender = document.getElementById('gender').value;
-            const guestType = document.getElementById('guestType').value;
-            const relation = document.getElementById('relation').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const drinks = document.getElementById('selectedDrinks').value || "Non spécifié";
-            const needHotel = document.getElementById('needHotel').checked;
-            const needTransport = document.getElementById('needTransport').checked;
-            const table = assignTable();
-
-            try {
-                if (currentInviteId) {
-                    const inviteRef = doc(db, "invites", currentInviteId);
-                    await updateDoc(inviteRef, {
-                        gender: gender,
-                        type: guestType,
-                        relation: relation,
-                        phone: phone,
-                        email: email,
-                        drinks: drinks,
-                        needHotel: needHotel,
-                        needTransport: needTransport,
-                        table: table,
-                        isConfirmed: true,
-                        confirmationDate: new Date()
-                    });
-                    
-                    showPass(currentInviteId, name, table, drinks);
-                    document.getElementById('rsvpForm').style.display = 'none';
-                    showNotification("✅ Merci ! Votre présence a été confirmée avec succès.", "success");
-                } else {
-                    throw new Error("Aucun code d'invitation trouvé");
-                }
-            } catch (err) {
-                console.error(err);
-                showNotification("❌ Une erreur est survenue : " + err.message, "error");
-            }
-            
-            submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirmer ma présence';
-            submitBtn.disabled = false;
-        });
-
-        // ========== BOUTON ADMIN - FONCTIONS ==========
-        const adminLinkBtn = document.getElementById('adminLinkBtn');
-        const adminModal = document.getElementById('adminModal');
-
-        function openAdminModal() {
-            adminModal.classList.add('active');
-        }
-
-        function closeAdminModal() {
-            adminModal.classList.remove('active');
-        }
-
-        function redirectToAdmin() {
-            window.location.href = 'admin.html';
-        }
-
-        // Écouteur d'événement pour le bouton admin
-        if (adminLinkBtn) {
-            adminLinkBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                openAdminModal();
-            });
-        }
-
-        // Fermer le modal en cliquant à l'extérieur
-        if (adminModal) {
-            adminModal.addEventListener('click', (e) => {
-                if (e.target === adminModal) {
-                    closeAdminModal();
-                }
-            });
-        }
-
-        // Fermer avec la touche Echap
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && adminModal && adminModal.classList.contains('active')) {
-                closeAdminModal();
-            }
-        });
-
-        // Exposer les fonctions globalement pour les appels HTML
-        window.openAdminModal = openAdminModal;
-        window.closeAdminModal = closeAdminModal;
-        window.redirectToAdmin = redirectToAdmin;
+            showNotification(`${count} codes générés`,'success');
+            closeGenerateModal();
+            refreshData();
+        };
+        window.closeGenerateModal = () => document.getElementById('generateModal').classList.remove('active');
+        window.openAssignModal = () => { updateGuestSelect(); document.getElementById('assignModal').classList.add('active'); };
+        window.closeAssignModal = () => document.getElementById('assignModal').classList.remove('active');
+        window.assignCode = async () => {
+            let id = document.getElementById('guest-select').value;
+            let code = document.getElementById('custom-code').value.trim().toUpperCase() || `INV-${Math.random().toString(36).substring(2,8).toUpperCase()}`;
+            if(!id) return showNotification("Sélectionnez un invité","error");
+            if(allGuests.find(g=>g.uniqueCode===code)) return showNotification("Code déjà utilisé","error");
+            await updateDoc(doc(db,"invites",id),{uniqueCode:code});
+            showNotification("Code attribué","success");
+            closeAssignModal(); refreshData();
+        };
+        window.exportCSV = () => {
+            let csv = [['Nom','Téléphone','Email','Relation','Table','Code','Statut']];
+            allGuests.forEach(g=>csv.push([g.name||'',g.phone||'',g.email||'',g.relation||'',g.table||'',g.uniqueCode||'',g.isScanned?'Entré':(g.isConfirmed?'Confirmé':'En attente')]));
+            let blob = new Blob([csv.map(r=>r.join(',')).join('\n')],{type:'text/csv'});
+            let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='invites.csv'; a.click();
+        };
+        function showNotification(msg,type){ let n=document.createElement('div'); n.className=`notification ${type}`; n.innerText=msg; document.body.appendChild(n); setTimeout(()=>n.remove(),3000); }
     </script>
 </body>
 </html>
