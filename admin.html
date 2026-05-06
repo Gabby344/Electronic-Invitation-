@@ -6,7 +6,6 @@
     <title>Admin – Rosin & Concilia</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -95,6 +94,7 @@
         <div class="login-card">
             <i class="fas fa-crown" style="font-size: 3rem; color: var(--gold);"></i>
             <h2>Espace organisateur</h2>
+            <p style="margin-bottom: 15px; color:#666;">Rosin & Concilia - 2026</p>
             <input type="email" id="adminEmail" placeholder="admin@rosin-concilia.com">
             <input type="password" id="adminPass" placeholder="Mot de passe">
             <button onclick="loginAdmin()">Connexion</button>
@@ -114,7 +114,7 @@
         <div class="stats-grid">
             <div class="stat-card"><i class="fas fa-users"></i><h3>Total invités</h3><div class="stat-value" id="totalCount">0</div></div>
             <div class="stat-card"><i class="fas fa-check-circle"></i><h3>Confirmés</h3><div class="stat-value" id="confirmedCount">0</div></div>
-            <div class="stat-card"><i class="fas fa-qrcode"></i><h3>Entrés (scannés)</h3><div class="stat-value" id="scannedCount">0</div></div>
+            <div class="stat-card"><i class="fas fa-qrcode"></i><h3>Entrés scannés</h3><div class="stat-value" id="scannedCount">0</div></div>
             <div class="stat-card"><i class="fas fa-clock"></i><h3>En attente</h3><div class="stat-value" id="pendingCount">0</div></div>
         </div>
 
@@ -123,44 +123,62 @@
         </div>
 
         <div class="filters">
-            <div class="filter-group"><label>Statut</label><select id="statusFilter" onchange="renderTable()"><option value="all">Tous</option><option value="confirmed">Confirmés</option><option value="scanned">Déjà entrés</option><option value="pending">Non entrés</option><option value="notConfirmed">Non confirmés</option></select></div>
-            <div class="filter-group"><label>Table</label><select id="tableFilter" onchange="renderTable()"><option value="all">Toutes</option><option value="Paris">🇫🇷 Paris</option><option value="Londres">🇬🇧 Londres</option><option value="Berlin">🇩🇪 Berlin</option><option value="Rome">🇮🇹 Rome</option><option value="Madrid">🇪🇸 Madrid</option><option value="Bruxelles">🇧🇪 Bruxelles</option><option value="Lubumbashi">🇨🇩 Lubumbashi</option><option value="Kinshasa">🇨🇩 Kinshasa</option><option value="Dakar">🇸🇳 Dakar</option><option value="Abidjan">🇨🇮 Abidjan</option><option value="Johannesburg">🇿🇦 Johannesburg</option><option value="Le Caire">🇪🇬 Le Caire</option></select></div>
-            <div class="filter-group"><label>Rechercher</label><input type="text" id="searchInput" placeholder="Nom ou téléphone..." onkeyup="renderTable()"></div>
+            <div class="filter-group">
+                <label>Statut</label>
+                <select id="statusFilter" onchange="renderTable()">
+                    <option value="all">Tous</option>
+                    <option value="confirmed">Confirmés</option>
+                    <option value="scanned">Déjà entrés</option>
+                    <option value="pending">Non entrés</option>
+                    <option value="notConfirmed">Non confirmés</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Table</label>
+                <select id="tableFilter" onchange="renderTable()">
+                    <option value="all">Toutes</option>
+                    <option>Paris</option><option>Londres</option><option>Berlin</option>
+                    <option>Rome</option><option>Madrid</option><option>Bruxelles</option>
+                    <option>Lubumbashi</option><option>Kinshasa</option><option>Dakar</option>
+                    <option>Abidjan</option><option>Johannesburg</option><option>Le Caire</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Rechercher</label>
+                <input type="text" id="searchInput" placeholder="Nom ou téléphone..." onkeyup="renderTable()">
+            </div>
         </div>
 
         <div class="table-container">
             <div class="table-header"><span><i class="fas fa-list"></i> Liste des invités</span><span id="resultInfo"></span></div>
-            <table id="guestTable"><thead><tr><th>Nom</th><th>Téléphone</th><th>Table</th><th>Boisson</th><th>Statut</th><th>Action</th></tr></thead><tbody id="tableBody"></tbody></table>
+            <table><thead><tr><th>Nom</th><th>Téléphone</th><th>Table</th><th>Boisson</th><th>Statut</th><th>Action</th></tr></thead><tbody id="tableBody"></tbody></table>
         </div>
     </div>
 
-    <!-- Modal ajout invité -->
+    <!-- Modal Ajouter invité -->
     <div id="addGuestModal" class="modal">
         <div class="modal-content">
             <h3><i class="fas fa-user-plus"></i> Ajouter un invité</h3>
             <input type="text" id="newName" placeholder="Nom complet">
             <input type="tel" id="newPhone" placeholder="Téléphone">
             <select id="newTable">
-                <option value="Paris">🇫🇷 Paris</option><option value="Londres">🇬🇧 Londres</option>
-                <option value="Berlin">🇩🇪 Berlin</option><option value="Rome">🇮🇹 Rome</option>
-                <option value="Madrid">🇪🇸 Madrid</option><option value="Bruxelles">🇧🇪 Bruxelles</option>
-                <option value="Lubumbashi">🇨🇩 Lubumbashi</option><option value="Kinshasa">🇨🇩 Kinshasa</option>
-                <option value="Dakar">🇸🇳 Dakar</option><option value="Abidjan">🇨🇮 Abidjan</option>
-                <option value="Johannesburg">🇿🇦 Johannesburg</option><option value="Le Caire">🇪🇬 Le Caire</option>
+                <option>Paris</option><option>Londres</option><option>Berlin</option>
+                <option>Rome</option><option>Madrid</option><option>Bruxelles</option>
+                <option>Lubumbashi</option><option>Kinshasa</option><option>Dakar</option>
             </select>
             <select id="newDrink">
-                <option>Primus</option><option>Mützig</option><option>Tembo</option><option>Turbo King</option>
-                <option>Whisky</option><option>Champagne</option><option>Coca-Cola</option><option>Jus Ceres</option><option>Eau</option>
+                <option>Primus</option><option>Champagne</option><option>Whisky</option>
+                <option>Coca-Cola</option><option>Jus Ceres</option><option>Eau</option>
             </select>
-            <button onclick="addGuest()" style="background: var(--success); color:white; margin-top:15px;">Ajouter</button>
-            <button onclick="closeAddGuestModal()" style="background:#ccc; margin-top:10px;">Annuler</button>
+            <button onclick="addGuest()" style="background: var(--success); color:white; margin-top:15px; padding:10px;">Ajouter</button>
+            <button onclick="closeAddGuestModal()" style="background:#ccc; margin-top:10px; padding:10px;">Annuler</button>
         </div>
     </div>
 
-    <!-- Modal scan QR -->
+    <!-- Modal Scanner -->
     <div id="scannerModal" class="modal">
         <div class="modal-content">
-            <h3><i class="fas fa-qrcode"></i> Scanner le pass d'entrée</h3>
+            <h3><i class="fas fa-qrcode"></i> Scanner le pass</h3>
             <video id="scannerVideo" playsinline></video>
             <div id="scanResultArea" class="scan-result" style="display:none;"></div>
             <button onclick="closeScanner()" style="margin-top: 15px; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer;">Fermer</button>
@@ -190,7 +208,9 @@
         window.loginAdmin = () => {
             const email = document.getElementById('adminEmail').value;
             const pass = document.getElementById('adminPass').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(() => alert("Identifiants incorrects"));
+            signInWithEmailAndPassword(auth, email, pass)
+                .then(() => showNotif("Connexion réussie", "success"))
+                .catch(() => alert("Identifiants incorrects"));
         };
         window.logoutAdmin = () => signOut(auth);
 
@@ -243,7 +263,21 @@
             tbody.innerHTML = "";
             filtered.forEach(g => {
                 let statusBadge = g.isScanned ? '<span class="badge-scanned">✅ Entré</span>' : (g.isConfirmed ? '<span class="badge-confirmed">Confirmé</span>' : '<span class="badge-pending">En attente</span>');
-                tbody.innerHTML += `<tr><td><strong>${g.name || '—'}</strong></td><td>${g.phone || '—'}</td><td><span style="background:#E8D5A3;padding:4px 10px;border-radius:20px;">${g.table || '—'}</span></td><td>${g.drink || '—'}</td><td>${statusBadge}</td><td><button class="btn" onclick="markEntry('${g.id}')" style="background:var(--info);color:white;padding:5px 12px;" ${g.isScanned ? 'disabled' : ''}><i class="fas fa-check"></i> Valider entrée</button> <button onclick="deleteGuest('${g.id}')" style="background:var(--danger);color:white;padding:5px 12px;border-radius:8px;border:none;cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`;
+                tbody.innerHTML += `<tr>
+                    <td><strong>${g.name || '—'}</strong></td>
+                    <td>${g.phone || '—'}</td>
+                    <td><span style="background:#E8D5A3;padding:4px 10px;border-radius:20px;">${g.table || '—'}</span></td>
+                    <td>${g.drink || '—'}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <button onclick="markEntry('${g.id}')" style="background:var(--info);color:white;padding:6px 12px;border-radius:8px;border:none;cursor:pointer;" ${g.isScanned ? 'disabled' : ''}>
+                            <i class="fas fa-check"></i> Entrée
+                        </button>
+                        <button onclick="deleteGuest('${g.id}')" style="background:var(--danger);color:white;padding:6px 12px;border-radius:8px;border:none;cursor:pointer;margin-left:5px;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>`;
             });
         };
 
@@ -318,7 +352,9 @@
                 canvas.height = video.videoHeight;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                if (typeof jsQR === 'undefined') await new Promise(r => { let s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js'; s.onload = r; document.head.appendChild(s); });
+                if (typeof jsQR === 'undefined') {
+                    await new Promise(r => { let s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js'; s.onload = r; document.head.appendChild(s); });
+                }
                 const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const qr = jsQR(img.data, canvas.width, canvas.height);
                 if (qr) {
@@ -341,19 +377,16 @@
         }
         async function showGuestInfo(id) {
             const guestRef = doc(db, "invites", id);
-            const guestSnap = await getDocs(query(collection(db, "invites"), where("id", "==", id)));
             const docSnap = await import("firebase/firestore").then(({ getDoc }) => getDoc(guestRef));
             if (!docSnap.exists()) { showNotif("Invité non trouvé", "error"); closeScanner(); return; }
             const guest = docSnap.data();
-            
             const resultDiv = document.getElementById('scanResultArea');
             if (guest.isScanned) {
-                resultDiv.innerHTML = `<h4>❌ DÉJÀ ENTRÉ</h4><p><strong>${guest.name}</strong> a déjà scanné son pass à ${guest.scanTime ? new Date(guest.scanTime.toDate()).toLocaleTimeString() : 'plus tôt'}.</p><p>La personne est déjà dans la salle.</p>`;
+                resultDiv.innerHTML = `<h4>❌ DÉJÀ ENTRÉ</h4><p><strong>${guest.name}</strong> a déjà scanné son pass.</p><p>La personne est déjà dans la salle.</p>`;
                 resultDiv.style.display = 'block';
                 showNotif(`⚠️ ${guest.name} est déjà entré(e) !`, "error");
                 return;
             }
-            
             resultDiv.innerHTML = `
                 <h4>🎟️ INVITATION VALIDE</h4>
                 <p><strong>👤 Nom:</strong> ${guest.name}</p>
