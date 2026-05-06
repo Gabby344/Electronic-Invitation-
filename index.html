@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Confirmation – Rosin & Concilia</title>
+    <title>Invitation Mariage – Rosin & Concilia</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -19,6 +19,7 @@
             --cream: #FFF9F0;
             --success: #2ECC71;
             --error: #E74C3C;
+            --info: #3498DB;
         }
         body { font-family: 'Montserrat', sans-serif; background: var(--cream); }
         .hero {
@@ -63,7 +64,25 @@
         }
         .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(191,149,63,0.3); }
         .btn-outline { background: none; border: 2px solid var(--gold); padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: 600; }
-        .ticket { background: linear-gradient(135deg, #fff, #fef9e6); padding: 30px; border-radius: 25px; border: 2px dashed var(--gold); text-align: center; margin-top: 25px; }
+        .ticket {
+            background: linear-gradient(135deg, #fff, #fef9e6);
+            padding: 25px; border-radius: 25px;
+            border: 2px solid var(--gold);
+            text-align: center; margin-top: 25px;
+            position: relative;
+        }
+        .ticket:before {
+            content: "✦";
+            position: absolute; top: -12px; left: 20px;
+            background: white; padding: 0 10px;
+            color: var(--gold); font-size: 1.2rem;
+        }
+        .ticket:after {
+            content: "✦";
+            position: absolute; top: -12px; right: 20px;
+            background: white; padding: 0 10px;
+            color: var(--gold); font-size: 1.2rem;
+        }
         #qrcode { display: flex; justify-content: center; margin: 20px 0; }
         .notification {
             position: fixed; bottom: 20px; right: 20px; padding: 15px 25px;
@@ -73,98 +92,37 @@
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .notification.success { background: var(--success); }
         .notification.error { background: var(--error); }
+        .notification.info { background: var(--info); }
         .loading { display: inline-block; width: 18px; height: 18px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.6s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .footer { text-align: center; padding: 30px; font-size: 0.7rem; background: var(--dark); color: white; margin-top: 40px; }
         
-        /* Bouton admin discret */
+        /* Admin button */
         .admin-trigger {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 42px;
-            height: 42px;
+            position: fixed; bottom: 20px; left: 20px;
+            width: 42px; height: 42px;
             background: rgba(0,0,0,0.35);
             backdrop-filter: blur(4px);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 999;
-            transition: all 0.25s ease;
-            color: rgba(255,255,255,0.6);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 999;
+            transition: 0.25s; color: rgba(255,255,255,0.6);
             font-size: 1.1rem;
-            text-decoration: none;
-            border: 1px solid rgba(255,255,255,0.2);
         }
-        .admin-trigger:hover {
-            background: var(--gold);
-            color: white;
-            transform: scale(1.08);
-            border-color: var(--gold);
-            opacity: 1;
-        }
-        
-        /* Petit modal de confirmation avant redirection */
+        .admin-trigger:hover { background: var(--gold); color: white; transform: scale(1.08); }
         .admin-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(6px);
-            z-index: 10000;
-            display: none;
-            align-items: center;
-            justify-content: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+            z-index: 10000; display: none; align-items: center; justify-content: center;
         }
         .admin-modal.active { display: flex; }
         .admin-modal-card {
-            background: white;
-            padding: 30px 35px;
-            border-radius: 28px;
-            text-align: center;
-            max-width: 340px;
-            width: 85%;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.25);
+            background: white; padding: 30px; border-radius: 28px;
+            text-align: center; max-width: 340px; width: 85%;
         }
-        .admin-modal-card i {
-            font-size: 2.5rem;
-            color: var(--gold);
-            margin-bottom: 12px;
-        }
-        .admin-modal-card h4 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            color: var(--dark);
-        }
-        .admin-modal-card p {
-            color: #5a5a5a;
-            margin-bottom: 25px;
-            font-size: 0.9rem;
-        }
-        .admin-modal-buttons {
-            display: flex;
-            gap: 14px;
-            justify-content: center;
-        }
-        .admin-modal-buttons button {
-            padding: 10px 22px;
-            border: none;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-go {
-            background: var(--gold);
-            color: white;
-        }
-        .btn-go:hover { background: var(--gold-dark); transform: translateY(-2px);}
-        .btn-cancel { background: #e2e2e2; color: #333; }
-        .btn-cancel:hover { background: #ccc; }
+        .admin-modal-card button { padding: 10px 22px; border-radius: 40px; font-weight: 600; cursor: pointer; margin: 5px; }
+        .btn-go { background: var(--gold); color: white; border: none; }
+        .btn-cancel { background: #e2e2e2; border: none; }
         
         @media (max-width: 768px) {
             .card { padding: 25px; margin: -60px 15px 30px; }
@@ -189,31 +147,35 @@
 
     <div class="card">
         <h2><i class="fas fa-heart"></i> Confirmer ma présence</h2>
-        <p style="text-align: center; margin-bottom: 25px;">Merci de remplir ce formulaire pour confirmer votre venue.</p>
+        <p style="text-align: center; margin-bottom: 25px;">Entrez votre numéro de téléphone pour confirmer votre venue.</p>
         
-        <form id="guestForm">
+        <div id="phoneSection">
             <div class="form-group">
-                <label><i class="fas fa-user"></i> Nom complet *</label>
-                <input type="text" id="fullName" required placeholder="Jean Mukendi">
+                <label><i class="fas fa-phone"></i> Votre numéro de téléphone *</label>
+                <input type="tel" id="phoneNumber" required placeholder="+243 XXX XXX XXX">
+            </div>
+            <button class="btn-gold" id="checkPhoneBtn"><i class="fas fa-search"></i> Vérifier mon invitation</button>
+        </div>
+
+        <div id="confirmSection" style="display: none;">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Nom complet</label>
+                <input type="text" id="fullName" readonly style="background: #f5f5f5;">
             </div>
             <div class="form-group">
-                <label><i class="fas fa-venus-mars"></i> Sexe *</label>
+                <label><i class="fas fa-venus-mars"></i> Sexe</label>
                 <select id="gender"><option>Homme</option><option>Femme</option></select>
             </div>
             <div class="form-group">
-                <label><i class="fas fa-users"></i> Type de présence *</label>
+                <label><i class="fas fa-users"></i> Type de présence</label>
                 <select id="presenceType"><option>Solo</option><option>En couple</option><option>Avec famille</option></select>
             </div>
             <div class="form-group">
-                <label><i class="fas fa-handshake"></i> Relation avec les mariés *</label>
+                <label><i class="fas fa-handshake"></i> Relation</label>
                 <select id="relation">
                     <option>Famille proche</option><option>Famille éloignée</option>
                     <option>Ami proche</option><option>Ami(e)</option><option>Collègue</option><option>VIP</option>
                 </select>
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-phone"></i> Téléphone *</label>
-                <input type="tel" id="phone" required placeholder="+243 XXX XXX XXX">
             </div>
             <div class="form-group">
                 <label><i class="fas fa-envelope"></i> Email (optionnel)</label>
@@ -222,20 +184,52 @@
             <div class="form-group">
                 <label><i class="fas fa-glass-cheers"></i> Boisson préférée</label>
                 <select id="drink">
-                    <option>Whisky</option><option>Tembo</option><option>Coca</option>
-                    <option>Champagne</option><option>Jus</option><option>Eau</option>
+                    <optgroup label="Bières Bralima">
+                        <option>Primus</option><option>Mützig</option><option>Skol</option><option>Castel</option>
+                    </optgroup>
+                    <optgroup label="Bières Bralima Tembo">
+                        <option>Tembo</option><option>Tembo Malt</option><option>Tembo Cacao</option>
+                    </optgroup>
+                    <optgroup label="Bières Brasimba">
+                        <option>Turbo King</option><option>Léopard</option><option>Simba</option><option>Pils</option>
+                    </optgroup>
+                    <optgroup label="Spiritueux">
+                        <option>Whisky Jameson</option><option>Whisky Label 5</option><option>Whisky Black</option>
+                        <option>Vodka</option><option>Gin</option><option>Rhum</option>
+                    </optgroup>
+                    <optgroup label="Vins & Champagnes">
+                        <option>Vin Rouge</option><option>Vin Blanc</option><option>Champagne Moët</option>
+                        <option>Champagne Veuve Clicquot</option><option>Vin rosé</option>
+                    </optgroup>
+                    <optgroup label="Boissons gazeuses">
+                        <option>Coca-Cola</option><option>Fanta Orange</option><option>Fanta Tonic</option>
+                        <option>Sprite</option><option>Schweppes</option><option>Pschitt</option>
+                    </optgroup>
+                    <optgroup label="Jus">
+                        <option>Jus Ceres Ananas</option><option>Jus Ceres Mangue</option><option>Jus Ceres Orange</option>
+                        <option>Jus Ceres Raisin</option><option>Jus Ceres Pomme</option>
+                        <option>Jus Coup d'Pouce</option>
+                    </optgroup>
+                    <optgroup label="Eaux">
+                        <option>Eau Cristal</option><option>Eau Sucrine</option><option>Eau Matadi</option>
+                        <option>Eau gazeuse Perrier</option><option>Eau plate</option>
+                    </optgroup>
                 </select>
             </div>
-            <button type="submit" class="btn-gold" id="submitBtn"><i class="fas fa-check-circle"></i> Confirmer & obtenir mon pass</button>
-        </form>
+            <button class="btn-gold" id="confirmPresenceBtn"><i class="fas fa-check-circle"></i> Confirmer & obtenir mon pass</button>
+        </div>
 
         <div id="ticketBlock" style="display: none;">
             <div class="ticket" id="ticketArea">
                 <h3 class="shimmer"><i class="fas fa-ticket-alt"></i> PASS ENTRÉE</h3>
-                <div style="margin: 15px 0;"><strong>Invité(e):</strong> <span id="displayName"></span><br><strong>Table:</strong> <span id="displayTable"></span><br><strong>Boisson:</strong> <span id="displayDrink"></span></div>
+                <div style="margin: 15px 0; text-align: left;">
+                    <p><strong>👤 Invité(e):</strong> <span id="displayName"></span></p>
+                    <p><strong>🍽️ Table:</strong> <span id="displayTable"></span></p>
+                    <p><strong>🥤 Boisson:</strong> <span id="displayDrink"></span></p>
+                    <p><strong>📅 Samedi 20 Juin 2026 - 19h00</strong><br>Salle Aurore, Lubumbashi</p>
+                </div>
                 <div id="qrcodeContainer"></div>
-                <p>Samedi 20 Juin 2026 - 19h00<br>Salle Aurore, Lubumbashi</p>
-                <p style="font-size: 0.7rem; margin-top: 10px;">Présentez ce QR code à l'entrée</p>
+                <p style="font-size: 0.7rem; margin-top: 10px;">🔒 Présentez ce QR code à l'entrée. Usage unique.</p>
             </div>
             <button class="btn-outline" id="downloadPassBtn" style="margin-top: 15px; width: 100%;"><i class="fas fa-download"></i> Télécharger mon pass</button>
         </div>
@@ -243,27 +237,20 @@
 
     <div class="footer"><i class="fas fa-heart" style="color: var(--gold);"></i><br>Rosin & Concilia - 2026</div>
 
-    <!-- Bouton admin discret (bas gauche) -->
-    <div class="admin-trigger" id="adminTriggerBtn">
-        <i class="fas fa-crown"></i>
-    </div>
-
-    <!-- Petit modal de confirmation -->
+    <!-- Bouton admin -->
+    <div class="admin-trigger" id="adminTriggerBtn"><i class="fas fa-crown"></i></div>
     <div id="adminConfirmModal" class="admin-modal">
         <div class="admin-modal-card">
-            <i class="fas fa-shield-alt"></i>
+            <i class="fas fa-shield-alt" style="font-size: 2.5rem; color: var(--gold);"></i>
             <h4>Accès organisateur</h4>
-            <p>Redirection vers l'espace réservé aux mariés et organisateurs.</p>
-            <div class="admin-modal-buttons">
-                <button class="btn-go" id="confirmAdminBtn">Continuer</button>
-                <button class="btn-cancel" id="cancelAdminBtn">Annuler</button>
-            </div>
+            <button class="btn-go" id="confirmAdminBtn">Continuer</button>
+            <button class="btn-cancel" id="cancelAdminBtn">Annuler</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyASCqKVU-tchKTnjkwemo_8DORutXiGQCc",
@@ -287,8 +274,9 @@
             }, 4500);
         }
 
-        const tables = ['fantan', 'coca', 'temba', 'wisky', 'champagne', 'elanc', 'sansbo'];
-        
+        let currentGuest = null;
+        let currentGuestId = null;
+
         function showMessage(msg, type) {
             const div = document.createElement('div');
             div.className = `notification ${type}`;
@@ -297,56 +285,118 @@
             setTimeout(() => div.remove(), 4000);
         }
 
-        document.getElementById('guestForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.innerHTML = '<span class="loading"></span> Enregistrement...';
+        // Vérifier le téléphone dans la liste admin
+        document.getElementById('checkPhoneBtn').addEventListener('click', async () => {
+            const phone = document.getElementById('phoneNumber').value.trim();
+            if (!phone) { showMessage("Entrez votre numéro de téléphone", "error"); return; }
+            
+            const btn = document.getElementById('checkPhoneBtn');
+            btn.innerHTML = '<span class="loading"></span> Vérification...';
             btn.disabled = true;
 
-            const name = document.getElementById('fullName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            
-            const existing = await getDocs(query(collection(db, "invites"), where("phone", "==", phone)));
-            if (!existing.empty) {
-                showMessage("Ce numéro a déjà été enregistré. Contactez l'organisateur.", "error");
-                btn.innerHTML = '<i class="fas fa-check-circle"></i> Confirmer & obtenir mon pass';
-                btn.disabled = false;
-                return;
-            }
+            try {
+                const q = query(collection(db, "invites"), where("phone", "==", phone));
+                const snapshot = await getDocs(q);
+                
+                if (snapshot.empty) {
+                    showMessage("❌ Désolé, votre numéro n'est pas sur la liste des invités. Contactez les organisateurs.", "error");
+                    btn.innerHTML = '<i class="fas fa-search"></i> Vérifier mon invitation';
+                    btn.disabled = false;
+                    return;
+                }
 
-            const randomTable = tables[Math.floor(Math.random() * tables.length)];
-            const guestData = {
-                name: name,
+                const docRef = snapshot.docs[0];
+                const data = docRef.data();
+                
+                if (data.isScanned) {
+                    showMessage("⚠️ Ce pass a déjà été utilisé à l'entrée.", "error");
+                    btn.innerHTML = '<i class="fas fa-search"></i> Vérifier mon invitation';
+                    btn.disabled = false;
+                    return;
+                }
+
+                if (data.isConfirmed) {
+                    showMessage("✅ Vous avez déjà confirmé ! Voici votre pass.", "success");
+                    currentGuestId = docRef.id;
+                    currentGuest = data;
+                    document.getElementById('displayName').innerText = data.name;
+                    document.getElementById('displayTable').innerText = data.table || "Paris";
+                    document.getElementById('displayDrink').innerText = data.drink || "Champagne";
+                    
+                    const qrData = JSON.stringify({
+                        id: docRef.id,
+                        name: data.name,
+                        table: data.table,
+                        drink: data.drink,
+                        event: "Mariage Rosin & Concilia",
+                        date: "20 Juin 2026"
+                    });
+                    const qrDiv = document.getElementById('qrcodeContainer');
+                    qrDiv.innerHTML = "";
+                    new QRCode(qrDiv, { text: qrData, width: 170, height: 170 });
+                    document.getElementById('phoneSection').style.display = 'none';
+                    document.getElementById('confirmSection').style.display = 'none';
+                    document.getElementById('ticketBlock').style.display = 'block';
+                    btn.innerHTML = '<i class="fas fa-search"></i> Vérifier mon invitation';
+                    btn.disabled = false;
+                    return;
+                }
+
+                currentGuestId = docRef.id;
+                currentGuest = data;
+                document.getElementById('fullName').value = data.name;
+                document.getElementById('phoneSection').style.display = 'none';
+                document.getElementById('confirmSection').style.display = 'block';
+                showMessage(`👋 Bienvenue ${data.name} ! Complétez vos informations.`, "success");
+            } catch (err) {
+                console.error(err);
+                showMessage("Erreur lors de la vérification", "error");
+            }
+            btn.innerHTML = '<i class="fas fa-search"></i> Vérifier mon invitation';
+            btn.disabled = false;
+        });
+
+        // Confirmation finale
+        document.getElementById('confirmPresenceBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('confirmPresenceBtn');
+            btn.innerHTML = '<span class="loading"></span> Génération...';
+            btn.disabled = true;
+
+            const updateData = {
                 gender: document.getElementById('gender').value,
                 type: document.getElementById('presenceType').value,
                 relation: document.getElementById('relation').value,
-                phone: phone,
                 email: document.getElementById('email').value,
                 drink: document.getElementById('drink').value,
-                table: randomTable,
                 isConfirmed: true,
-                isScanned: false,
-                createdAt: new Date()
+                confirmationDate: new Date()
             };
 
             try {
-                const docRef = await addDoc(collection(db, "invites"), guestData);
-                const qrData = JSON.stringify({ id: docRef.id, name: name, table: randomTable });
+                await updateDoc(doc(db, "invites", currentGuestId), updateData);
                 
-                document.getElementById('displayName').innerText = name;
-                document.getElementById('displayTable').innerText = randomTable;
-                document.getElementById('displayDrink').innerText = document.getElementById('drink').value;
+                document.getElementById('displayName').innerText = currentGuest.name;
+                document.getElementById('displayTable').innerText = currentGuest.table || "Paris";
+                document.getElementById('displayDrink').innerText = updateData.drink;
                 
+                const qrData = JSON.stringify({
+                    id: currentGuestId,
+                    name: currentGuest.name,
+                    table: currentGuest.table,
+                    drink: updateData.drink,
+                    event: "Mariage Rosin & Concilia",
+                    date: "20 Juin 2026"
+                });
                 const qrDiv = document.getElementById('qrcodeContainer');
                 qrDiv.innerHTML = "";
                 new QRCode(qrDiv, { text: qrData, width: 170, height: 170 });
                 
-                document.getElementById('guestForm').style.display = 'none';
+                document.getElementById('confirmSection').style.display = 'none';
                 document.getElementById('ticketBlock').style.display = 'block';
-                showMessage("✅ Inscription réussie ! Téléchargez votre pass.", "success");
+                showMessage("✅ Confirmation réussie ! Téléchargez votre pass.", "success");
             } catch (err) {
                 console.error(err);
-                showMessage("Erreur lors de l'enregistrement", "error");
+                showMessage("Erreur lors de la confirmation", "error");
             }
             btn.innerHTML = '<i class="fas fa-check-circle"></i> Confirmer & obtenir mon pass';
             btn.disabled = false;
@@ -363,37 +413,12 @@
             }).catch(() => showMessage("Erreur téléchargement", "error"));
         });
 
-        // ---------- BOUTON ADMIN DISCRET ----------
-        const adminBtn = document.getElementById('adminTriggerBtn');
+        // Admin button
         const modal = document.getElementById('adminConfirmModal');
-        const confirmBtn = document.getElementById('confirmAdminBtn');
-        const cancelBtn = document.getElementById('cancelAdminBtn');
-
-        function openModal() { modal.classList.add('active'); }
-        function closeModal() { modal.classList.remove('active'); }
-
-        adminBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal();
-        });
-
-        confirmBtn.addEventListener('click', () => {
-            window.location.href = 'admin.html';
-        });
-
-        cancelBtn.addEventListener('click', () => {
-            closeModal();
-        });
-
-        // Fermer en cliquant à l'extérieur du modal
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-
-        // Touche Échap
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
-        });
+        document.getElementById('adminTriggerBtn').onclick = () => modal.classList.add('active');
+        document.getElementById('confirmAdminBtn').onclick = () => window.location.href = 'admin.html';
+        document.getElementById('cancelAdminBtn').onclick = () => modal.classList.remove('active');
+        modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
     </script>
 </body>
 </html>
