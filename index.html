@@ -13,7 +13,6 @@
         :root {
             --gold: #C5A059;
             --gold-dark: #9B7B3A;
-            --gold-light: #E8D5A3;
             --gold-grad: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728);
             --dark: #1A1A2E;
             --cream: #FFF9F0;
@@ -23,7 +22,7 @@
         }
         body { font-family: 'Montserrat', sans-serif; background: var(--cream); }
         .hero {
-            position: relative; height: 55vh; min-height: 350px;
+            position: relative; height: 50vh; min-height: 350px;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden; color: white; text-align: center;
         }
@@ -34,7 +33,7 @@
             opacity: 0; transition: opacity 1.8s ease;
         }
         .hero-bg .slide.active { opacity: 1; }
-        .hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(2px); z-index: -1; }
+        .hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); z-index: -1; }
         .hero-content { z-index: 10; padding: 30px; border-radius: 30px; backdrop-filter: blur(8px); background: rgba(0,0,0,0.3); }
         .shimmer {
             font-family: 'Playfair Display', serif;
@@ -45,22 +44,22 @@
         }
         @keyframes shimmer { 0% { background-position: -100% center; } 100% { background-position: 200% center; } }
         .card {
-            max-width: 750px; margin: -70px auto 50px;
+            max-width: 800px; margin: -60px auto 50px;
             background: white; padding: 40px; border-radius: 35px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1); position: relative; z-index: 20;
         }
-        h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); text-align: center; margin-bottom: 25px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--dark); }
+        h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); text-align: center; margin-bottom: 20px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--dark); font-size: 0.85rem; }
         input, select {
-            width: 100%; padding: 14px; border: 1px solid #ddd;
-            border-radius: 14px; font-family: inherit; font-size: 1rem;
+            width: 100%; padding: 12px; border: 1px solid #ddd;
+            border-radius: 12px; font-family: inherit; font-size: 0.95rem;
         }
         input:focus, select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(197,160,89,0.1); }
         .btn-gold {
-            background: var(--gold-grad); border: none; padding: 15px;
+            background: var(--gold-grad); border: none; padding: 14px;
             width: 100%; font-weight: 700; border-radius: 50px;
-            cursor: pointer; font-size: 1rem; transition: 0.3s;
+            cursor: pointer; font-size: 1rem; transition: 0.3s; margin-top: 10px;
         }
         .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(191,149,63,0.3); }
         .btn-outline { background: none; border: 2px solid var(--gold); padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: 600; }
@@ -71,22 +70,12 @@
             text-align: center; margin-top: 25px;
             position: relative;
         }
-        .ticket:before {
-            content: "✦";
-            position: absolute; top: -12px; left: 20px;
-            background: white; padding: 0 10px;
-            color: var(--gold); font-size: 1.2rem;
-        }
-        .ticket:after {
-            content: "✦";
-            position: absolute; top: -12px; right: 20px;
-            background: white; padding: 0 10px;
-            color: var(--gold); font-size: 1.2rem;
-        }
-        #qrcode { display: flex; justify-content: center; margin: 20px 0; }
+        .ticket:before { content: "✦"; position: absolute; top: -12px; left: 20px; background: white; padding: 0 10px; color: var(--gold); font-size: 1.2rem; }
+        .ticket:after { content: "✦"; position: absolute; top: -12px; right: 20px; background: white; padding: 0 10px; color: var(--gold); font-size: 1.2rem; }
+        #qrcodeContainer { display: flex; justify-content: center; margin: 20px 0; }
         .notification {
-            position: fixed; bottom: 20px; right: 20px; padding: 15px 25px;
-            border-radius: 14px; color: white; z-index: 1000;
+            position: fixed; bottom: 20px; right: 20px; padding: 14px 22px;
+            border-radius: 12px; color: white; z-index: 1000;
             animation: slideIn 0.3s ease; font-weight: 500;
         }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -96,8 +85,6 @@
         .loading { display: inline-block; width: 18px; height: 18px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.6s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .footer { text-align: center; padding: 30px; font-size: 0.7rem; background: var(--dark); color: white; margin-top: 40px; }
-        
-        /* Admin button */
         .admin-trigger {
             position: fixed; bottom: 20px; left: 20px;
             width: 42px; height: 42px;
@@ -117,15 +104,14 @@
         }
         .admin-modal.active { display: flex; }
         .admin-modal-card {
-            background: white; padding: 30px; border-radius: 28px;
-            text-align: center; max-width: 340px; width: 85%;
+            background: white; padding: 25px; border-radius: 28px;
+            text-align: center; max-width: 300px; width: 85%;
         }
-        .admin-modal-card button { padding: 10px 22px; border-radius: 40px; font-weight: 600; cursor: pointer; margin: 5px; }
+        .admin-modal-card button { padding: 8px 20px; border-radius: 30px; font-weight: 600; cursor: pointer; margin: 5px; }
         .btn-go { background: var(--gold); color: white; border: none; }
         .btn-cancel { background: #e2e2e2; border: none; }
-        
         @media (max-width: 768px) {
-            .card { padding: 25px; margin: -60px 15px 30px; }
+            .card { padding: 25px; margin: -50px 15px 30px; }
             .hero-content h1 { font-size: 1.6rem; }
             .admin-trigger { width: 38px; height: 38px; bottom: 15px; left: 15px; font-size: 1rem;}
         }
@@ -147,20 +133,22 @@
 
     <div class="card">
         <h2><i class="fas fa-heart"></i> Confirmer ma présence</h2>
-        <p style="text-align: center; margin-bottom: 25px;">Entrez votre numéro de téléphone pour confirmer votre venue.</p>
+        <p style="text-align: center; margin-bottom: 20px;">Entrez votre numéro de téléphone pour confirmer votre venue.</p>
         
-        <div id="phoneSection">
+        <!-- Étape 1 : Vérification téléphone -->
+        <div id="step1">
             <div class="form-group">
                 <label><i class="fas fa-phone"></i> Votre numéro de téléphone *</label>
-                <input type="tel" id="phoneNumber" required placeholder="+243 XXX XXX XXX">
+                <input type="tel" id="phoneNumber" placeholder="+243 XXX XXX XXX" required>
             </div>
             <button class="btn-gold" id="checkPhoneBtn"><i class="fas fa-search"></i> Vérifier mon invitation</button>
         </div>
 
-        <div id="confirmSection" style="display: none;">
+        <!-- Étape 2 : Formulaire de confirmation -->
+        <div id="step2" style="display: none;">
             <div class="form-group">
                 <label><i class="fas fa-user"></i> Nom complet</label>
-                <input type="text" id="fullName" readonly style="background: #f5f5f5;">
+                <input type="text" id="fullName" readonly style="background: #f0f0f0;">
             </div>
             <div class="form-group">
                 <label><i class="fas fa-venus-mars"></i> Sexe</label>
@@ -184,42 +172,21 @@
             <div class="form-group">
                 <label><i class="fas fa-glass-cheers"></i> Boisson préférée</label>
                 <select id="drink">
-                    <optgroup label="Bières Bralima">
-                        <option>Primus</option><option>Mützig</option><option>Skol</option><option>Castel</option>
-                    </optgroup>
-                    <optgroup label="Bières Bralima Tembo">
-                        <option>Tembo</option><option>Tembo Malt</option><option>Tembo Cacao</option>
-                    </optgroup>
-                    <optgroup label="Bières Brasimba">
-                        <option>Turbo King</option><option>Léopard</option><option>Simba</option><option>Pils</option>
-                    </optgroup>
-                    <optgroup label="Spiritueux">
-                        <option>Whisky Jameson</option><option>Whisky Label 5</option><option>Whisky Black</option>
-                        <option>Vodka</option><option>Gin</option><option>Rhum</option>
-                    </optgroup>
-                    <optgroup label="Vins & Champagnes">
-                        <option>Vin Rouge</option><option>Vin Blanc</option><option>Champagne Moët</option>
-                        <option>Champagne Veuve Clicquot</option><option>Vin rosé</option>
-                    </optgroup>
-                    <optgroup label="Boissons gazeuses">
-                        <option>Coca-Cola</option><option>Fanta Orange</option><option>Fanta Tonic</option>
-                        <option>Sprite</option><option>Schweppes</option><option>Pschitt</option>
-                    </optgroup>
-                    <optgroup label="Jus">
-                        <option>Jus Ceres Ananas</option><option>Jus Ceres Mangue</option><option>Jus Ceres Orange</option>
-                        <option>Jus Ceres Raisin</option><option>Jus Ceres Pomme</option>
-                        <option>Jus Coup d'Pouce</option>
-                    </optgroup>
-                    <optgroup label="Eaux">
-                        <option>Eau Cristal</option><option>Eau Sucrine</option><option>Eau Matadi</option>
-                        <option>Eau gazeuse Perrier</option><option>Eau plate</option>
-                    </optgroup>
+                    <optgroup label="Bières Bralima"><option>Primus</option><option>Mützig</option><option>Skol</option><option>Castel</option></optgroup>
+                    <optgroup label="Bières Tembo"><option>Tembo</option><option>Tembo Malt</option><option>Tembo Cacao</option></optgroup>
+                    <optgroup label="Bières Brasimba"><option>Turbo King</option><option>Léopard</option><option>Simba</option><option>Pils</option></optgroup>
+                    <optgroup label="Spiritueux"><option>Whisky Jameson</option><option>Whisky Label 5</option><option>Vodka</option><option>Gin</option><option>Rhum</option></optgroup>
+                    <optgroup label="Vins & Champagne"><option>Vin Rouge</option><option>Vin Blanc</option><option>Champagne Moët</option><option>Champagne Veuve</option></optgroup>
+                    <optgroup label="Sodas"><option>Coca-Cola</option><option>Fanta Orange</option><option>Sprite</option><option>Schweppes</option></optgroup>
+                    <optgroup label="Jus Ceres"><option>Jus Ceres Ananas</option><option>Jus Ceres Mangue</option><option>Jus Ceres Orange</option><option>Jus Ceres Raisin</option></optgroup>
+                    <optgroup label="Eaux"><option>Eau Cristal</option><option>Eau Sucrine</option><option>Eau gazeuse</option><option>Eau plate</option></optgroup>
                 </select>
             </div>
-            <button class="btn-gold" id="confirmPresenceBtn"><i class="fas fa-check-circle"></i> Confirmer & obtenir mon pass</button>
+            <button class="btn-gold" id="confirmBtn"><i class="fas fa-check-circle"></i> Confirmer & obtenir mon pass</button>
         </div>
 
-        <div id="ticketBlock" style="display: none;">
+        <!-- Étape 3 : QR Code -->
+        <div id="step3" style="display: none;">
             <div class="ticket" id="ticketArea">
                 <h3 class="shimmer"><i class="fas fa-ticket-alt"></i> PASS ENTRÉE</h3>
                 <div style="margin: 15px 0; text-align: left;">
@@ -239,9 +206,9 @@
 
     <!-- Bouton admin -->
     <div class="admin-trigger" id="adminTriggerBtn"><i class="fas fa-crown"></i></div>
-    <div id="adminConfirmModal" class="admin-modal">
+    <div id="adminModal" class="admin-modal">
         <div class="admin-modal-card">
-            <i class="fas fa-shield-alt" style="font-size: 2.5rem; color: var(--gold);"></i>
+            <i class="fas fa-shield-alt" style="font-size: 2rem; color: var(--gold);"></i>
             <h4>Accès organisateur</h4>
             <button class="btn-go" id="confirmAdminBtn">Continuer</button>
             <button class="btn-cancel" id="cancelAdminBtn">Annuler</button>
@@ -274,8 +241,8 @@
             }, 4500);
         }
 
-        let currentGuest = null;
         let currentGuestId = null;
+        let currentGuestData = null;
 
         function showMessage(msg, type) {
             const div = document.createElement('div');
@@ -285,11 +252,14 @@
             setTimeout(() => div.remove(), 4000);
         }
 
-        // Vérifier le téléphone dans la liste admin
+        // ÉTAPE 1 : Vérifier le téléphone
         document.getElementById('checkPhoneBtn').addEventListener('click', async () => {
             const phone = document.getElementById('phoneNumber').value.trim();
-            if (!phone) { showMessage("Entrez votre numéro de téléphone", "error"); return; }
-            
+            if (!phone) {
+                showMessage("Veuillez entrer votre numéro de téléphone", "error");
+                return;
+            }
+
             const btn = document.getElementById('checkPhoneBtn');
             btn.innerHTML = '<span class="loading"></span> Vérification...';
             btn.disabled = true;
@@ -297,7 +267,7 @@
             try {
                 const q = query(collection(db, "invites"), where("phone", "==", phone));
                 const snapshot = await getDocs(q);
-                
+
                 if (snapshot.empty) {
                     showMessage("❌ Désolé, votre numéro n'est pas sur la liste des invités. Contactez les organisateurs.", "error");
                     btn.innerHTML = '<i class="fas fa-search"></i> Vérifier mon invitation';
@@ -307,24 +277,24 @@
 
                 const docRef = snapshot.docs[0];
                 const data = docRef.data();
-                
-                if (data.isScanned) {
+                currentGuestId = docRef.id;
+                currentGuestData = data;
+
+                if (data.isScanned === true) {
                     showMessage("⚠️ Ce pass a déjà été utilisé à l'entrée.", "error");
                     btn.innerHTML = '<i class="fas fa-search"></i> Vérifier mon invitation';
                     btn.disabled = false;
                     return;
                 }
 
-                if (data.isConfirmed) {
-                    showMessage("✅ Vous avez déjà confirmé ! Voici votre pass.", "success");
-                    currentGuestId = docRef.id;
-                    currentGuest = data;
+                if (data.isConfirmed === true) {
+                    // Déjà confirmé, afficher directement le pass
                     document.getElementById('displayName').innerText = data.name;
                     document.getElementById('displayTable').innerText = data.table || "Paris";
                     document.getElementById('displayDrink').innerText = data.drink || "Champagne";
                     
                     const qrData = JSON.stringify({
-                        id: docRef.id,
+                        id: currentGuestId,
                         name: data.name,
                         table: data.table,
                         drink: data.drink,
@@ -334,35 +304,37 @@
                     const qrDiv = document.getElementById('qrcodeContainer');
                     qrDiv.innerHTML = "";
                     new QRCode(qrDiv, { text: qrData, width: 170, height: 170 });
-                    document.getElementById('phoneSection').style.display = 'none';
-                    document.getElementById('confirmSection').style.display = 'none';
-                    document.getElementById('ticketBlock').style.display = 'block';
+                    
+                    document.getElementById('step1').style.display = 'none';
+                    document.getElementById('step2').style.display = 'none';
+                    document.getElementById('step3').style.display = 'block';
+                    showMessage("✅ Vous avez déjà confirmé ! Voici votre pass.", "success");
                     btn.innerHTML = '<i class="fas fa-search"></i> Vérifier mon invitation';
                     btn.disabled = false;
                     return;
                 }
 
-                currentGuestId = docRef.id;
-                currentGuest = data;
+                // Première connexion : afficher le formulaire
                 document.getElementById('fullName').value = data.name;
-                document.getElementById('phoneSection').style.display = 'none';
-                document.getElementById('confirmSection').style.display = 'block';
+                document.getElementById('step1').style.display = 'none';
+                document.getElementById('step2').style.display = 'block';
                 showMessage(`👋 Bienvenue ${data.name} ! Complétez vos informations.`, "success");
-            } catch (err) {
-                console.error(err);
-                showMessage("Erreur lors de la vérification", "error");
+
+            } catch (error) {
+                console.error("Erreur de vérification:", error);
+                showMessage("Erreur de connexion. Réessayez.", "error");
             }
             btn.innerHTML = '<i class="fas fa-search"></i> Vérifier mon invitation';
             btn.disabled = false;
         });
 
-        // Confirmation finale
-        document.getElementById('confirmPresenceBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('confirmPresenceBtn');
+        // ÉTAPE 2 : Confirmer la présence
+        document.getElementById('confirmBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('confirmBtn');
             btn.innerHTML = '<span class="loading"></span> Génération...';
             btn.disabled = true;
 
-            const updateData = {
+            const updates = {
                 gender: document.getElementById('gender').value,
                 type: document.getElementById('presenceType').value,
                 relation: document.getElementById('relation').value,
@@ -373,35 +345,41 @@
             };
 
             try {
-                await updateDoc(doc(db, "invites", currentGuestId), updateData);
+                const guestRef = doc(db, "invites", currentGuestId);
+                await updateDoc(guestRef, updates);
+
+                const tableToShow = currentGuestData.table || "Paris";
                 
-                document.getElementById('displayName').innerText = currentGuest.name;
-                document.getElementById('displayTable').innerText = currentGuest.table || "Paris";
-                document.getElementById('displayDrink').innerText = updateData.drink;
-                
+                document.getElementById('displayName').innerText = currentGuestData.name;
+                document.getElementById('displayTable').innerText = tableToShow;
+                document.getElementById('displayDrink').innerText = updates.drink;
+
                 const qrData = JSON.stringify({
                     id: currentGuestId,
-                    name: currentGuest.name,
-                    table: currentGuest.table,
-                    drink: updateData.drink,
+                    name: currentGuestData.name,
+                    table: tableToShow,
+                    drink: updates.drink,
                     event: "Mariage Rosin & Concilia",
                     date: "20 Juin 2026"
                 });
+
                 const qrDiv = document.getElementById('qrcodeContainer');
                 qrDiv.innerHTML = "";
                 new QRCode(qrDiv, { text: qrData, width: 170, height: 170 });
-                
-                document.getElementById('confirmSection').style.display = 'none';
-                document.getElementById('ticketBlock').style.display = 'block';
+
+                document.getElementById('step2').style.display = 'none';
+                document.getElementById('step3').style.display = 'block';
                 showMessage("✅ Confirmation réussie ! Téléchargez votre pass.", "success");
-            } catch (err) {
-                console.error(err);
-                showMessage("Erreur lors de la confirmation", "error");
+
+            } catch (error) {
+                console.error("Erreur de confirmation:", error);
+                showMessage("Erreur lors de la confirmation: " + error.message, "error");
             }
             btn.innerHTML = '<i class="fas fa-check-circle"></i> Confirmer & obtenir mon pass';
             btn.disabled = false;
         });
 
+        // Téléchargement du pass
         document.getElementById('downloadPassBtn').addEventListener('click', () => {
             const element = document.getElementById('ticketArea');
             html2canvas(element, { scale: 2, backgroundColor: '#fff' }).then(canvas => {
@@ -413,12 +391,12 @@
             }).catch(() => showMessage("Erreur téléchargement", "error"));
         });
 
-        // Admin button
-        const modal = document.getElementById('adminConfirmModal');
-        document.getElementById('adminTriggerBtn').onclick = () => modal.classList.add('active');
+        // Bouton admin
+        const adminModal = document.getElementById('adminModal');
+        document.getElementById('adminTriggerBtn').onclick = () => adminModal.classList.add('active');
         document.getElementById('confirmAdminBtn').onclick = () => window.location.href = 'admin.html';
-        document.getElementById('cancelAdminBtn').onclick = () => modal.classList.remove('active');
-        modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
+        document.getElementById('cancelAdminBtn').onclick = () => adminModal.classList.remove('active');
+        adminModal.onclick = (e) => { if (e.target === adminModal) adminModal.classList.remove('active'); };
     </script>
 </body>
 </html>
