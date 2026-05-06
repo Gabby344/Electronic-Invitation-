@@ -47,6 +47,7 @@
         .stat-card .stat-value { font-size: 2rem; font-weight: 700; color: var(--gold); }
         .btn { padding: 12px 25px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; }
         .btn-scan { background: var(--gold-grad); color: white; }
+        .btn-add { background: var(--success); color: white; }
         .filters {
             background: white; padding: 20px; border-radius: 20px;
             display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px;
@@ -70,9 +71,14 @@
         .modal.active { display: flex; }
         .modal-content {
             background: white; padding: 30px; border-radius: 30px;
-            max-width: 450px; width: 90%; text-align: center;
+            max-width: 500px; width: 90%; text-align: center;
         }
+        .modal-content input, .modal-content select { width: 100%; padding: 10px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; }
         #scannerVideo { width: 100%; height: 280px; object-fit: cover; background: #000; border-radius: 15px; margin: 15px 0; }
+        .scan-result {
+            background: #f5f5f5; padding: 15px; border-radius: 15px;
+            margin-top: 15px; text-align: left;
+        }
         .notification {
             position: fixed; bottom: 20px; right: 20px; padding: 14px 24px;
             border-radius: 12px; color: white; z-index: 3000; animation: slide 0.3s ease;
@@ -80,6 +86,7 @@
         @keyframes slide { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .notification.success { background: var(--success); }
         .notification.error { background: var(--danger); }
+        .notification.info { background: var(--info); }
         @media (max-width: 768px) { th, td { font-size: 0.75rem; padding: 8px; } }
     </style>
 </head>
@@ -98,40 +105,72 @@
         <div class="admin-header">
             <h1><i class="fas fa-chalkboard-user"></i> Dashboard – Rosin & Concilia</h1>
             <div>
-                <button class="btn" onclick="exportList()" style="background: var(--success); color:white;"><i class="fas fa-download"></i> Exporter CSV</button>
+                <button class="btn" onclick="openAddGuestModal()" style="background: var(--success); color:white;"><i class="fas fa-user-plus"></i> Ajouter invité</button>
+                <button class="btn" onclick="exportList()" style="background: var(--info); color:white;"><i class="fas fa-download"></i> Exporter CSV</button>
                 <button class="btn" onclick="logoutAdmin()" style="background: var(--danger); color:white;">Déconnexion</button>
             </div>
         </div>
 
         <div class="stats-grid">
-            <div class="stat-card"><i class="fas fa-users"></i><h3>Total inscrits</h3><div class="stat-value" id="totalCount">0</div></div>
+            <div class="stat-card"><i class="fas fa-users"></i><h3>Total invités</h3><div class="stat-value" id="totalCount">0</div></div>
             <div class="stat-card"><i class="fas fa-check-circle"></i><h3>Confirmés</h3><div class="stat-value" id="confirmedCount">0</div></div>
             <div class="stat-card"><i class="fas fa-qrcode"></i><h3>Entrés (scannés)</h3><div class="stat-value" id="scannedCount">0</div></div>
-            <div class="stat-card"><i class="fas fa-clock"></i><h3>Non scannés</h3><div class="stat-value" id="pendingCount">0</div></div>
+            <div class="stat-card"><i class="fas fa-clock"></i><h3>En attente</h3><div class="stat-value" id="pendingCount">0</div></div>
         </div>
 
-        <div style="margin-bottom: 20px;">
+        <div style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
             <button class="btn btn-scan" onclick="openScanner()"><i class="fas fa-camera"></i> Scanner QR code à l'entrée</button>
         </div>
 
         <div class="filters">
-            <div class="filter-group"><label>Statut</label><select id="statusFilter" onchange="renderTable()"><option value="all">Tous</option><option value="confirmed">Confirmés</option><option value="scanned">Déjà entrés</option><option value="pending">Non entrés</option></select></div>
-            <div class="filter-group"><label>Table</label><select id="tableFilter" onchange="renderTable()"><option value="all">Toutes</option><option value="fantan">Fantan</option><option value="coca">Coca</option><option value="temba">Temba</option><option value="wisky">Wisky</option><option value="champagne">Champagne</option></select></div>
+            <div class="filter-group"><label>Statut</label><select id="statusFilter" onchange="renderTable()"><option value="all">Tous</option><option value="confirmed">Confirmés</option><option value="scanned">Déjà entrés</option><option value="pending">Non entrés</option><option value="notConfirmed">Non confirmés</option></select></div>
+            <div class="filter-group"><label>Table</label><select id="tableFilter" onchange="renderTable()"><option value="all">Toutes</option><option value="Paris">🇫🇷 Paris</option><option value="Londres">🇬🇧 Londres</option><option value="Berlin">🇩🇪 Berlin</option><option value="Rome">🇮🇹 Rome</option><option value="Madrid">🇪🇸 Madrid</option><option value="Bruxelles">🇧🇪 Bruxelles</option><option value="Lubumbashi">🇨🇩 Lubumbashi</option><option value="Kinshasa">🇨🇩 Kinshasa</option><option value="Dakar">🇸🇳 Dakar</option><option value="Abidjan">🇨🇮 Abidjan</option><option value="Johannesburg">🇿🇦 Johannesburg</option><option value="Le Caire">🇪🇬 Le Caire</option></select></div>
             <div class="filter-group"><label>Rechercher</label><input type="text" id="searchInput" placeholder="Nom ou téléphone..." onkeyup="renderTable()"></div>
         </div>
 
         <div class="table-container">
-            <div class="table-header"><span><i class="fas fa-list"></i> Invités inscrits</span><span id="resultInfo"></span></div>
-            <table id="guestTable"><thead><tr><th>Nom</th><th>Téléphone</th><th>Relation</th><th>Table</th><th>Statut</th><th>Action</th></tr></thead><tbody id="tableBody"></tbody></table>
+            <div class="table-header"><span><i class="fas fa-list"></i> Liste des invités</span><span id="resultInfo"></span></div>
+            <table id="guestTable"><thead><tr><th>Nom</th><th>Téléphone</th><th>Table</th><th>Boisson</th><th>Statut</th><th>Action</th></tr></thead><tbody id="tableBody"></tbody></table>
         </div>
     </div>
 
-    <div id="scannerModal" class="modal"><div class="modal-content"><h3><i class="fas fa-qrcode"></i> Scanner le pass</h3><video id="scannerVideo" playsinline></video><button onclick="closeScanner()" style="margin-top: 15px; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer;">Fermer</button></div></div>
+    <!-- Modal ajout invité -->
+    <div id="addGuestModal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-user-plus"></i> Ajouter un invité</h3>
+            <input type="text" id="newName" placeholder="Nom complet">
+            <input type="tel" id="newPhone" placeholder="Téléphone">
+            <select id="newTable">
+                <option value="Paris">🇫🇷 Paris</option><option value="Londres">🇬🇧 Londres</option>
+                <option value="Berlin">🇩🇪 Berlin</option><option value="Rome">🇮🇹 Rome</option>
+                <option value="Madrid">🇪🇸 Madrid</option><option value="Bruxelles">🇧🇪 Bruxelles</option>
+                <option value="Lubumbashi">🇨🇩 Lubumbashi</option><option value="Kinshasa">🇨🇩 Kinshasa</option>
+                <option value="Dakar">🇸🇳 Dakar</option><option value="Abidjan">🇨🇮 Abidjan</option>
+                <option value="Johannesburg">🇿🇦 Johannesburg</option><option value="Le Caire">🇪🇬 Le Caire</option>
+            </select>
+            <select id="newDrink">
+                <option>Primus</option><option>Mützig</option><option>Tembo</option><option>Turbo King</option>
+                <option>Whisky</option><option>Champagne</option><option>Coca-Cola</option><option>Jus Ceres</option><option>Eau</option>
+            </select>
+            <button onclick="addGuest()" style="background: var(--success); color:white; margin-top:15px;">Ajouter</button>
+            <button onclick="closeAddGuestModal()" style="background:#ccc; margin-top:10px;">Annuler</button>
+        </div>
+    </div>
+
+    <!-- Modal scan QR -->
+    <div id="scannerModal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-qrcode"></i> Scanner le pass d'entrée</h3>
+            <video id="scannerVideo" playsinline></video>
+            <div id="scanResultArea" class="scan-result" style="display:none;"></div>
+            <button onclick="closeScanner()" style="margin-top: 15px; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer;">Fermer</button>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, updateDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyASCqKVU-tchKTnjkwemo_8DORutXiGQCc",
@@ -192,8 +231,9 @@
             const search = document.getElementById('searchInput').value.toLowerCase();
             let filtered = allGuests.filter(g => {
                 if (status === 'scanned' && !g.isScanned) return false;
-                if (status === 'pending' && g.isScanned) return false;
+                if (status === 'pending' && (g.isScanned || !g.isConfirmed)) return false;
                 if (status === 'confirmed' && !g.isConfirmed) return false;
+                if (status === 'notConfirmed' && g.isConfirmed) return false;
                 if (tableFilter !== 'all' && g.table !== tableFilter) return false;
                 if (search && !g.name?.toLowerCase().includes(search) && !g.phone?.includes(search)) return false;
                 return true;
@@ -203,7 +243,7 @@
             tbody.innerHTML = "";
             filtered.forEach(g => {
                 let statusBadge = g.isScanned ? '<span class="badge-scanned">✅ Entré</span>' : (g.isConfirmed ? '<span class="badge-confirmed">Confirmé</span>' : '<span class="badge-pending">En attente</span>');
-                tbody.innerHTML += `<tr><td><strong>${g.name || '—'}</strong></td><td>${g.phone || '—'}</td><td>${g.relation || '—'}</td><td><span style="background:#E8D5A3;padding:4px 10px;border-radius:20px;">${g.table || '—'}</span></td><td>${statusBadge}</td><td><button class="btn" onclick="markEntry('${g.id}')" style="background:var(--info);color:white;padding:5px 12px;" ${g.isScanned ? 'disabled' : ''}><i class="fas fa-check"></i> Valider entrée</button></td></tr>`;
+                tbody.innerHTML += `<tr><td><strong>${g.name || '—'}</strong></td><td>${g.phone || '—'}</td><td><span style="background:#E8D5A3;padding:4px 10px;border-radius:20px;">${g.table || '—'}</span></td><td>${g.drink || '—'}</td><td>${statusBadge}</td><td><button class="btn" onclick="markEntry('${g.id}')" style="background:var(--info);color:white;padding:5px 12px;" ${g.isScanned ? 'disabled' : ''}><i class="fas fa-check"></i> Valider entrée</button> <button onclick="deleteGuest('${g.id}')" style="background:var(--danger);color:white;padding:5px 12px;border-radius:8px;border:none;cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`;
             });
         };
 
@@ -214,9 +254,44 @@
             }
         };
 
+        window.deleteGuest = async (id) => {
+            if (confirm("Supprimer définitivement cet invité ?")) {
+                await deleteDoc(doc(db, "invites", id));
+                showNotif("Invité supprimé", "success");
+            }
+        };
+
+        window.openAddGuestModal = () => {
+            document.getElementById('addGuestModal').classList.add('active');
+        };
+        window.closeAddGuestModal = () => {
+            document.getElementById('addGuestModal').classList.remove('active');
+            document.getElementById('newName').value = '';
+            document.getElementById('newPhone').value = '';
+        };
+        window.addGuest = async () => {
+            const name = document.getElementById('newName').value.trim();
+            const phone = document.getElementById('newPhone').value.trim();
+            if (!name || !phone) { alert("Nom et téléphone requis"); return; }
+            const existing = await getDocs(query(collection(db, "invites"), where("phone", "==", phone)));
+            if (!existing.empty) { alert("Ce numéro existe déjà"); return; }
+            await addDoc(collection(db, "invites"), {
+                name: name,
+                phone: phone,
+                table: document.getElementById('newTable').value,
+                drink: document.getElementById('newDrink').value,
+                isConfirmed: false,
+                isScanned: false,
+                createdAt: new Date()
+            });
+            showNotif("Invité ajouté", "success");
+            closeAddGuestModal();
+        };
+
         // Scanner QR code
         window.openScanner = () => {
             document.getElementById('scannerModal').classList.add('active');
+            document.getElementById('scanResultArea').style.display = 'none';
             startCamera();
         };
         window.closeScanner = () => {
@@ -251,37 +326,56 @@
                         const data = JSON.parse(qr.data);
                         if (data.id) {
                             stopCamera();
-                            closeScanner();
-                            await validateGuest(data.id);
+                            await showGuestInfo(data.id);
                             return;
                         }
-                    } catch(e) { await searchByText(qr.data); }
+                    } catch(e) { await searchByPhone(qr.data); }
                 }
             }
             setTimeout(scanLoop, 400);
         }
-        async function searchByText(text) {
-            const q = query(collection(db, "invites"), where("name", "==", text));
+        async function searchByPhone(text) {
+            const q = query(collection(db, "invites"), where("phone", "==", text));
             const snap = await getDocs(q);
-            if (!snap.empty) { stopCamera(); closeScanner(); await validateGuest(snap.docs[0].id); }
+            if (!snap.empty) { stopCamera(); await showGuestInfo(snap.docs[0].id); }
         }
-        async function validateGuest(id) {
-            const ref = doc(db, "invites", id);
-            const snap = await getDocs(query(collection(db, "invites"), where("id", "==", id)));
-            // alternative directe
-            const docSnap = await import("firebase/firestore").then(({ getDoc }) => getDoc(ref));
-            if (!docSnap.exists()) { showNotif("Invitée non trouvé", "error"); return; }
-            const data = docSnap.data();
-            if (data.isScanned) { showNotif(`❌ ${data.name} est déjà entré`, "error"); return; }
-            await updateDoc(ref, { isScanned: true, scanTime: new Date() });
-            showNotif(`✅ ${data.name} – Bienvenue ! Table ${data.table || 'N/A'}`, "success");
+        async function showGuestInfo(id) {
+            const guestRef = doc(db, "invites", id);
+            const guestSnap = await getDocs(query(collection(db, "invites"), where("id", "==", id)));
+            const docSnap = await import("firebase/firestore").then(({ getDoc }) => getDoc(guestRef));
+            if (!docSnap.exists()) { showNotif("Invité non trouvé", "error"); closeScanner(); return; }
+            const guest = docSnap.data();
+            
+            const resultDiv = document.getElementById('scanResultArea');
+            if (guest.isScanned) {
+                resultDiv.innerHTML = `<h4>❌ DÉJÀ ENTRÉ</h4><p><strong>${guest.name}</strong> a déjà scanné son pass à ${guest.scanTime ? new Date(guest.scanTime.toDate()).toLocaleTimeString() : 'plus tôt'}.</p><p>La personne est déjà dans la salle.</p>`;
+                resultDiv.style.display = 'block';
+                showNotif(`⚠️ ${guest.name} est déjà entré(e) !`, "error");
+                return;
+            }
+            
+            resultDiv.innerHTML = `
+                <h4>🎟️ INVITATION VALIDE</h4>
+                <p><strong>👤 Nom:</strong> ${guest.name}</p>
+                <p><strong>📞 Téléphone:</strong> ${guest.phone || 'Non renseigné'}</p>
+                <p><strong>🍽️ Table:</strong> ${guest.table || 'Paris'}</p>
+                <p><strong>🥤 Boisson:</strong> ${guest.drink || 'Champagne'}</p>
+                <p><strong>✨ Bienvenue au mariage de Rosin & Concilia !</strong><br>Vous êtes sur la table <strong>${guest.table || 'Paris'}</strong>.</p>
+                <button onclick="validateEntry('${id}', '${guest.name.replace(/'/g, "\\'")}')" style="background:var(--success);color:white;border:none;padding:10px 20px;border-radius:30px;margin-top:10px;cursor:pointer;">✅ Valider l'entrée</button>
+            `;
+            resultDiv.style.display = 'block';
         }
+        window.validateEntry = async (id, name) => {
+            await updateDoc(doc(db, "invites", id), { isScanned: true, scanTime: new Date() });
+            showNotif(`✅ ${name} – Bienvenue à la fête !`, "success");
+            setTimeout(() => { closeScanner(); }, 1500);
+        };
         function stopCamera() { scannerActive = false; if (scannerStream) scannerStream.getTracks().forEach(t => t.stop()); }
         function showNotif(msg, type) { let d = document.createElement('div'); d.className = `notification ${type}`; d.innerText = msg; document.body.appendChild(d); setTimeout(() => d.remove(), 3000); }
 
         window.exportList = () => {
-            let csv = [["Nom","Téléphone","Email","Relation","Table","Boisson","Statut entrée"]];
-            allGuests.forEach(g => csv.push([g.name||'', g.phone||'', g.email||'', g.relation||'', g.table||'', g.drink||'', g.isScanned ? "Entré" : "Non entré"]));
+            let csv = [["Nom","Téléphone","Email","Table","Boisson","Confirmé","Entré","Date confirmation"]];
+            allGuests.forEach(g => csv.push([g.name||'', g.phone||'', g.email||'', g.table||'', g.drink||'', g.isConfirmed ? "Oui" : "Non", g.isScanned ? "Oui" : "Non", g.confirmationDate ? new Date(g.confirmationDate.toDate()).toLocaleString() : ""]));
             let blob = new Blob([csv.map(r => r.join(",")).join("\n")], {type: "text/csv"});
             let a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "invites_mariage.csv"; a.click(); URL.revokeObjectURL(a.href);
         };
