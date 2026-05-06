@@ -76,7 +76,101 @@
         .loading { display: inline-block; width: 18px; height: 18px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.6s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .footer { text-align: center; padding: 30px; font-size: 0.7rem; background: var(--dark); color: white; margin-top: 40px; }
-        @media (max-width: 768px) { .card { padding: 25px; margin: -60px 15px 30px; } .hero-content h1 { font-size: 1.6rem; } }
+        
+        /* Bouton admin discret */
+        .admin-trigger {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 42px;
+            height: 42px;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.25s ease;
+            color: rgba(255,255,255,0.6);
+            font-size: 1.1rem;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .admin-trigger:hover {
+            background: var(--gold);
+            color: white;
+            transform: scale(1.08);
+            border-color: var(--gold);
+            opacity: 1;
+        }
+        
+        /* Petit modal de confirmation avant redirection */
+        .admin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-modal.active { display: flex; }
+        .admin-modal-card {
+            background: white;
+            padding: 30px 35px;
+            border-radius: 28px;
+            text-align: center;
+            max-width: 340px;
+            width: 85%;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.25);
+        }
+        .admin-modal-card i {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+        .admin-modal-card h4 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        .admin-modal-card p {
+            color: #5a5a5a;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+        .admin-modal-buttons {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+        }
+        .admin-modal-buttons button {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-go {
+            background: var(--gold);
+            color: white;
+        }
+        .btn-go:hover { background: var(--gold-dark); transform: translateY(-2px);}
+        .btn-cancel { background: #e2e2e2; color: #333; }
+        .btn-cancel:hover { background: #ccc; }
+        
+        @media (max-width: 768px) {
+            .card { padding: 25px; margin: -60px 15px 30px; }
+            .hero-content h1 { font-size: 1.6rem; }
+            .admin-trigger { width: 38px; height: 38px; bottom: 15px; left: 15px; font-size: 1rem;}
+        }
     </style>
 </head>
 <body>
@@ -149,6 +243,24 @@
 
     <div class="footer"><i class="fas fa-heart" style="color: var(--gold);"></i><br>Rosin & Concilia - 2026</div>
 
+    <!-- Bouton admin discret (bas gauche) -->
+    <div class="admin-trigger" id="adminTriggerBtn">
+        <i class="fas fa-crown"></i>
+    </div>
+
+    <!-- Petit modal de confirmation -->
+    <div id="adminConfirmModal" class="admin-modal">
+        <div class="admin-modal-card">
+            <i class="fas fa-shield-alt"></i>
+            <h4>Accès organisateur</h4>
+            <p>Redirection vers l'espace réservé aux mariés et organisateurs.</p>
+            <div class="admin-modal-buttons">
+                <button class="btn-go" id="confirmAdminBtn">Continuer</button>
+                <button class="btn-cancel" id="cancelAdminBtn">Annuler</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -194,7 +306,6 @@
             const name = document.getElementById('fullName').value.trim();
             const phone = document.getElementById('phone').value.trim();
             
-            // Vérifier si l'invité existe déjà
             const existing = await getDocs(query(collection(db, "invites"), where("phone", "==", phone)));
             if (!existing.empty) {
                 showMessage("Ce numéro a déjà été enregistré. Contactez l'organisateur.", "error");
@@ -250,6 +361,38 @@
                 link.click();
                 showMessage("Pass téléchargé", "success");
             }).catch(() => showMessage("Erreur téléchargement", "error"));
+        });
+
+        // ---------- BOUTON ADMIN DISCRET ----------
+        const adminBtn = document.getElementById('adminTriggerBtn');
+        const modal = document.getElementById('adminConfirmModal');
+        const confirmBtn = document.getElementById('confirmAdminBtn');
+        const cancelBtn = document.getElementById('cancelAdminBtn');
+
+        function openModal() { modal.classList.add('active'); }
+        function closeModal() { modal.classList.remove('active'); }
+
+        adminBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            window.location.href = 'admin.html';
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            closeModal();
+        });
+
+        // Fermer en cliquant à l'extérieur du modal
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Touche Échap
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
         });
     </script>
 </body>
